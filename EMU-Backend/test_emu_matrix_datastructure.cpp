@@ -1,8 +1,7 @@
 #include <iostream>
 #include "emu_matrix_datastructure.hpp"
 #include <assert.h>
-
-//typedef uint64_t IndexType;
+//#include <vector>
 
 int main()
 {
@@ -13,7 +12,7 @@ int main()
 	std::cout<<"Test Case 1: EMU Matrix Dimension Constructor Test: Started \n";
 	fflush(stdout);
 
-	const IndexType M = 8;
+	const IndexType M = 16;
 	const IndexType N = 4;
 
 	emu_matrix<long> m1(M,N); 
@@ -40,14 +39,23 @@ int main()
 
 	IndexType mat_size=0;
 	
-	long mat[M][N] = {{1, 0, 0, 4},
-		{2, 0, 0, 0},
-		{3, 0, 9, 4},
-		{4, 5, 0, 3},
-		{5, 0, 0, 1},
-		{6, 0, 0, 0},
-		{7, 1, 0, 2},
-		{8, 2, 3, 4}};
+	long mat[M][N]={{1, 0, 0, 4},
+	                {2, 0, 0, 0},
+		        {3, 0, 9, 4},
+                        {4, 5, 0, 3},
+			{5, 0, 0, 1},
+			{6, 0, 0, 0},
+			{7, 1, 0, 2},
+			{8, 2, 3, 4},
+                	{1, 0, 0, 4},
+			{2, 0, 0, 0},
+			{3, 0, 9, 4},
+			{4, 5, 0, 3},
+			{5, 0, 0, 1},
+			{6, 0, 0, 0},
+			{7, 1, 0, 2},
+			{8, 2, 3, 4}};
+
 	std::cout<<"Printing the 2D array\n";
 	fflush(stdout);
 
@@ -89,6 +97,23 @@ int main()
 	std::cout<<"\t\t EMU Matrix Size= "<<emu_mat_size<<"\t 2D Matrix Size= "<<mat_size<<"\n";
 	fflush(stdout);
 	std::cout<<"Test Case 3: Total number of elements pushed into emu_matrix_datastructure Test: Completed \n\n";
+	fflush(stdout);
+
+
+
+
+		//****************************************************************************
+	// Test: Compare the elements in input2D Array and the elements in emu_matrix_datastructure
+
+	std::cout<<"Test Case 4: Compare the elements in input2D Array and the elements in emu_matrix_datastructure Test: Started \n";
+	fflush(stdout);
+
+	bool result = m1.compare_with_input((long*) mat); 
+
+	std::cout<<"\t\t Comparison Result = "<<std::boolalpha<<result<<"\n";
+	fflush(stdout);
+
+	std::cout<<"Test Case 4: Compare the elements in input2D Array and the elements in emu_matrix_datastructure Test: Completed \n";
 	fflush(stdout);
 
 	return 0;

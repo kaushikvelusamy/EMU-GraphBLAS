@@ -25,6 +25,7 @@ class emu_matrix {
 	void store_from_2d_array(ScalarType *arr);
 	IndexType size();
 	void print_emu_matrix();
+        bool compare_with_input(ScalarType *arr);
   
 };
 
@@ -83,5 +84,19 @@ void emu_matrix<ScalarType>::print_emu_matrix()
 		std::cout<<'\n';
 		fflush(stdout);
 	}
+}
+
+template <class ScalarType>
+bool emu_matrix<ScalarType>::compare_with_input(ScalarType *arr)
+{
+	for ( IndexType i =0; i < NODELETS(); i++)
+	{
+		for( IndexType j =0; j < repn; j++)
+		{
+		  if( A[i][j] != *((arr+i*repn)+j))
+		    return false;
+		}
+	}
+	return true;
 }
 
