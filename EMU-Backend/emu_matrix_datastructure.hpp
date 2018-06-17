@@ -12,7 +12,13 @@ class emu_matrix {
 	IndexType m_num_cols;
 	IndexType rpn;
 	IndexType repn;
-	ScalarType **A;
+
+	//ScalarType **A;
+
+	typedef std::tuple <IndexType,ScalarType> element;
+       
+
+	element **A;
 
 	public:
 	emu_matrix(IndexType rows, IndexType cols)
@@ -20,41 +26,44 @@ class emu_matrix {
 		m_num_rows=rows;
 		m_num_cols=cols;
 	}
+
+
+
 	IndexType getRowDim();
 	IndexType getColDim();
 	void store_from_2d_array(ScalarType *arr);
 	IndexType size();
 	void print_emu_matrix();
-        bool compare_with_input(ScalarType *arr);
-  
+	bool compare_with_input(ScalarType *arr);
+
 };
 
 
-template <class ScalarType>
+	template <class ScalarType>
 IndexType emu_matrix<ScalarType>::getRowDim()
 {
 	return m_num_rows;  
 }
 
-template <class ScalarType>
+	template <class ScalarType>
 IndexType emu_matrix<ScalarType>::getColDim()
 {
 	return m_num_cols;  
 }
 
-template <class ScalarType>
+	template <class ScalarType>
 void emu_matrix<ScalarType>::store_from_2d_array(ScalarType *arr)
 {
 	rpn = m_num_rows / NODELETS();
 	repn = rpn * m_num_cols;
-	A = (ScalarType **) mw_malloc2d(NODELETS(), repn * sizeof(ScalarType));
+	A  = (element **) mw_malloc2d(NODELETS(), repn * sizeof(element));
 
 	for (IndexType i =0; i < NODELETS(); i++)
 	{
 		for(IndexType j =0; j < repn; j++)
 		{
 
-			A[i][j] = *((arr+i*repn)+j);
+			A[i][j] = std::make_tuple((j%m_num_cols),*((arr+i*repn)+j));
 			m_nvals = m_nvals + 1;
 		}
 
@@ -63,21 +72,21 @@ void emu_matrix<ScalarType>::store_from_2d_array(ScalarType *arr)
 }
 
 
-template <class ScalarType>
+	template <class ScalarType>
 IndexType emu_matrix<ScalarType>::size()
 {
 	return m_nvals;  
 }
 
 
-template <class ScalarType>
+	template <class ScalarType>
 void emu_matrix<ScalarType>::print_emu_matrix()
 {
 	for ( IndexType i =0; i < NODELETS(); i++)
 	{
 		for( IndexType j =0; j < repn; j++)
 		{
-			std::cout<<A[i][j]<<'\t';
+			std::cout<<std::get<0>(A[i][j])<<" "<<std::get<1>(A[i][j])<<'\t';
 			fflush(stdout);
 
 		}
@@ -86,15 +95,15 @@ void emu_matrix<ScalarType>::print_emu_matrix()
 	}
 }
 
-template <class ScalarType>
+	template <class ScalarType>
 bool emu_matrix<ScalarType>::compare_with_input(ScalarType *arr)
 {
 	for ( IndexType i =0; i < NODELETS(); i++)
 	{
 		for( IndexType j =0; j < repn; j++)
 		{
-		  if( A[i][j] != *((arr+i*repn)+j))
-		    return false;
+			if( std::get<1>(A[i][j]) != *((arr+i*repn)+j))
+				return false;
 		}
 	}
 	return true;
