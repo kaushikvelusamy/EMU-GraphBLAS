@@ -55,7 +55,6 @@ class emu_matrix {
 	void row_cyclic_sparse_print();
 
 
-
 	bool compare_with_input(ScalarType *arr);
 
 };
@@ -183,17 +182,23 @@ bool emu_matrix<ScalarType>::compare_with_input(ScalarType *arr)
 	template <class ScalarType>
 void emu_matrix<ScalarType>::row_cyclic_dense_store(ScalarType *arr)
 {
-	rpn = m_num_rows / NODELETS();
-	repn = rpn * m_num_cols;
-	denseCyclicMatrix  = (matrixElement **) mw_malloc2d(NODELETS(), repn * sizeof(matrixElement));
+	
+  	rpn = m_num_rows / NODELETS();
+  	repn = rpn * m_num_cols;
+  	denseCyclicMatrix  = (matrixElement **) mw_malloc2d(NODELETS(), repn * sizeof(matrixElement));
+  
 	for (IndexType i =0; i < m_num_rows; i++)
 	{
 		for(IndexType j =0; j < m_num_cols; j++)
-		{
-		  denseBlockMatrix[(i % 8)][j] = std::make_tuple(i,j,*((arr+i*repn)+j));
-			m_nvals_cyclic_dense = m_nvals_cyclic_dense + 1;
+		{	
+		  if (i <= 7)
+		  denseCyclicMatrix[i][j] = std::make_tuple(i,j,*((arr+i*m_num_cols)+j));
+		  else
+		    denseCyclicMatrix[(i % 8)][(((m_num_rows-1)/i)*(m_num_cols))+j] = std::make_tuple(i,j,*((arr+i*m_num_cols)+j));
+	
+		    m_nvals_cyclic_dense = m_nvals_cyclic_dense + 1;
 		}
-	}
+	 }
 }
 
 
@@ -204,6 +209,7 @@ IndexType emu_matrix<ScalarType>::row_cyclic_dense_size()
 }
 
 
+
 	template <class ScalarType>
 void emu_matrix<ScalarType>::row_cyclic_dense_print()
 {
@@ -211,10 +217,67 @@ void emu_matrix<ScalarType>::row_cyclic_dense_print()
 	{
 		for( IndexType j =0; j < repn; j++)
 		{
-			std::cout<<std::get<0>(denseBlockMatrix[i][j])<<','<<std::get<1>(denseBlockMatrix[i][j])<<" "<<std::get<2>(denseBlockMatrix[i][j])<<'\t';
+			std::cout<<std::get<0>(denseCyclicMatrix[i][j])<<','<<std::get<1>(denseCyclicMatrix[i][j])<<" "<<std::get<2>(denseCyclicMatrix[i][j])<<'\t';
 			fflush(stdout);
-
 		}
+		std::cout<<'\n';
+		fflush(stdout);
+	}
+}
+
+
+	template <class ScalarType>
+void emu_matrix<ScalarType>::row_cyclic_sparse_store(ScalarType *arr)
+{
+	rpn = m_num_rows / NODELETS();
+	repn = rpn * m_num_cols;
+	sparseCyclicMatrix  = (matrixElement **) mw_malloc2d(NODELETS(), repn * sizeof(matrixElement));
+	IndexType nz_col_counter;
+	for (IndexType i =0; i < m_num_rows; i++)
+	{
+		nz_col_counter = 0;
+		for(IndexType j =0; j < m_num_cols; j++)
+		{
+			if ((*((arr+i*m_num_cols)+j)) != 0)
+			{
+
+			  if (i <= 7)
+			    sparseCyclicMatrix[i][j] = std::make_tuple(i,j,*((arr+i*m_num_cols)+j));
+			  else
+			    sparseCyclicMatrix[(i % 8)][(((m_num_rows-1)/i)*(m_num_cols))+j] = std::make_tuple(i,j,*((arr+i*m_num_cols)+j));
+			    m_nvals_sparse = m_nvals_sparse + 1;
+
+        			nz_col_counter++;
+			}
+			
+		}
+		
+	}
+}
+
+		 
+
+	template <class ScalarType>
+IndexType emu_matrix<ScalarType>::row_cyclic_sparse_size()
+{
+	return m_nvals_sparse;  
+}
+
+
+	template <class ScalarType>
+void emu_matrix<ScalarType>::row_cyclic_sparse_print()
+{
+	for ( IndexType i =0; i < NODELETS(); i++)
+	{
+		for( IndexType j =0; j < repn; j++)
+		{
+			if(std::get<2>(sparseCyclicMatrix[i][j]) != 0)
+			{
+				std::cout<<std::get<0>(sparseCyclicMatrix[i][j])<<','<<std::get<1>(sparseCyclicMatrix[i][j])<<" "<<std::get<2>(sparseCyclicMatrix[i][j])<<'\t';
+				fflush(stdout);
+			}
+		}
+
 		std::cout<<'\n';
 		fflush(stdout);
 	}

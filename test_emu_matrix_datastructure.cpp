@@ -30,7 +30,6 @@ int main()
 	std::cout<<"Test Case 1:Row Block Dense: EMU Matrix Dimension Constructor Test: Completed \n\n";
 	fflush(stdout);
 
-
 	//****************************************************************************
 	// Test: Store my input 2D array into emu_matrix_datastructure
 
@@ -39,22 +38,22 @@ int main()
 
 	IndexType mat_size=0;
 	
-	long mat[M][N]={{1, 0, 0, 4},
-	                {2, 0, 0, 0},
-		        {3, 0, 9, 4},
-                        {4, 5, 0, 3},
-			{5, 0, 0, 1},
-			{6, 0, 0, 0},
-			{7, 1, 0, 2},
-			{8, 2, 3, 4},
-                	{1, 0, 0, 4},
-			{2, 0, 0, 0},
-			{3, 0, 9, 4},
-			{4, 5, 0, 3},
-			{5, 0, 0, 1},
-			{6, 0, 0, 0},
-			{7, 1, 0, 2},
-			{8, 2, 3, 4}};
+	long mat[M][N]={{0, 0, 0, 4},
+	                {1, 0, 0, 0},
+		        {2, 0, 9, 4},
+                        {3, 5, 0, 3},
+			{4, 0, 0, 1},
+			{5, 0, 0, 0},
+			{6, 1, 0, 2},
+			{7, 2, 3, 4},
+                	{8, 0, 0, 4},
+			{9, 0, 0, 0},
+			{10, 0, 9, 4},
+			{11, 5, 0, 3},
+			{12, 0, 0, 1},
+			{13, 0, 0, 0},
+			{14, 1, 0, 2},
+			{15, 2, 3, 4}};
 
 	std::cout<<"Printing the 2D array\n";
 	fflush(stdout);
@@ -75,7 +74,6 @@ int main()
 
 	std::cout<<"Printing the array from emu_matrix_datastructure\n";
 	fflush(stdout);
-
 
 	m1.row_block_dense_store((long*) mat);
 	m1.row_block_dense_print();
@@ -162,15 +160,15 @@ int main()
 
 	assert(mat_size_nz == emu_mat_size1);
 	
-	std::cout<<"\t\t EMU Matrix Size= "<<emu_mat_size<<"\t 2D Matrix Size= "<<mat_size<<"\n";
+	std::cout<<"\t\t EMU Matrix Size= "<<mat_size_nz<<"\t 2D Matrix Size= "<<emu_mat_size1<<"\n";
 	fflush(stdout);
 	std::cout<<"Test Case 6: Row Block sparse: Total number of elements pushed into emu_matrix_datastructure Test: Completed \n\n";
 	fflush(stdout);
 
-		/***************************************************************************
-	// Test: Compare the elements in input2D Array and the elements in emu_matrix_datastructure
+		//***************************************************************************
+	// Test: Cyclic Dense Store:  Storing my input 2D array into emu_matrix_datastructure
 
-		std::cout<<"Test Case 7:Cyclic Dense Store:  Storing my input 2D array into emu_matrix_datastructure Test: Started \n";
+	std::cout<<"Test Case 7:Cyclic Dense Store:  Storing my input 2D array into emu_matrix_datastructure Test: Started \n";
 	fflush(stdout);
 
 	std::cout<<"Printing the 2D array\n";
@@ -192,14 +190,48 @@ int main()
 	std::cout<<"Printing the array from emu_matrix_datastructure\n";
 	fflush(stdout);
 
-
-	m1.row_cyclic_dense_store((long*) mat);
-	m1.row_cyclic_dense_print();
+	
+		m1.row_cyclic_dense_store((long*) mat);
+		m1.row_cyclic_dense_print();
 
 	std::cout<<"Test Case 7:Cyclic Dense Store: Storing my input 2D array into emu_matrix_datastructure Test: Completed \n\n";
 	fflush(stdout);
 
-	****************************************************************************/
+
+	//****************************************************************************
+	// Test: Cyclic Sparse Store:  Storing my input 2D array into emu_matrix_datastructure
+
+		std::cout<<"Test Case 8:Cyclic Sparse Store:  Storing my input 2D array into emu_matrix_datastructure Test: Started \n";
+	fflush(stdout);
+
+	std::cout<<"Printing the 2D array\n";
+	fflush(stdout);
+
+	
+	for ( IndexType i =0; i < num_rows; i++)
+	{
+		for( IndexType j =0; j < num_cols; j++)
+		{
+
+			std::cout<<mat[i][j]<<'\t';
+			fflush(stdout);
+		}
+		std::cout<<'\n';
+		fflush(stdout);
+	}
+
+	std::cout<<"Printing the array from emu_matrix_datastructure\n";
+	fflush(stdout);
+
+	
+		m1.row_cyclic_sparse_store((long*) mat);
+		m1.row_cyclic_sparse_print();
+	std::cout<<"Test Case 8:Cyclic Sparse Store: Storing my input 2D array into emu_matrix_datastructure Test: Completed \n\n";
+	fflush(stdout);
+
+
+	//****************************************************************************
+
 
 
 	
