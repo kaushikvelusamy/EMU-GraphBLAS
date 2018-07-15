@@ -18,22 +18,11 @@
 
 #pragma once
 
-#include <graphblas/detail/config.hpp>
-
 #include <graphblas/types.hpp>
-//#include <graphblas/exceptions.hpp>
-
 #include <graphblas/algebra.hpp>
-
-#include <graphblas/Matrix.hpp>
-//#include <graphblas/Vector.hpp>
-//#include <graphblas/ComplementView.hpp>
-//#include <graphblas/TransposeView.hpp>
-
 #include <graphblas/operations.hpp>
-//#include <graphblas/matrix_utils.hpp>
+#include <graphblas/Matrix.hpp>
 
 #define GB_INCLUDE_BACKEND_ALL 1
 #include <backend_include.hpp>
-
 #endif // GRAPHBLAS_HPP

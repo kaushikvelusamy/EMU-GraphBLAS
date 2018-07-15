@@ -196,72 +196,6 @@ namespace GraphBLAS
             }
         }
 
-#if 0
-        //**********************************************************************
-
-        /// Perform the dot product of a row of a matrix with a sparse vector without
-        /// pulling the indices out of the vector first.
-        template <typename D1, typename D2, typename D3, typename SemiringT>
-        bool dot2(D3                                                      &ans,
-                  std::vector<std::tuple<GraphBLAS::IndexType,D1> > const &A_row,
-                  std::vector<bool>                                 const &u_bitmap,
-                  std::vector<D2>                                   const &u_vals,
-                  GraphBLAS::IndexType                                     u_nvals,
-                  SemiringT                                                op)
-        {
-            bool value_set(false);
-            ans = op.zero();
-
-            if ((u_nvals == 0) || A_row.empty())
-            {
-                return value_set;
-            }
-
-            // find first stored value in u
-            GraphBLAS::IndexType u_idx(0);
-            while (!u_bitmap[u_idx]) ++u_idx; // skip unstored elements
-
-            // pull first value out of the row
-            auto A_iter = A_row.begin();
-            D1 a_val;
-            GraphBLAS::IndexType a_idx;
-
-            // loop through both ordered sets to compute sparse dot prod
-            while ((A_iter != A_row.end()) && (u_idx < u_vals.size()))
-            {
-                std::tie(a_idx, a_val) = *A_iter;
-                //std::cerr << "Examine u index = " << u_idx << "," << u_vals[u_idx]
-                //          << ", A col_idx = " << a_idx << "," << a_val << std::endl;
-
-                if (u_idx == a_idx)
-                {
-                    //std::cerr << ans << " + "  << a_val << " * "  << u_vals[u_idx]
-                    //          << " = " << op.mult(a_val, u_vals[u_idx]) << std::endl;
-
-                    ans = op.add(ans, op.mult(a_val, u_vals[u_idx]));
-                    value_set = true;
-
-                    //std::cerr << "Equal, mutliply_accum, ans = " << ans << std::endl;
-
-                    do { ++u_idx; } while ((u_idx < u_vals.size()) && !u_bitmap[u_idx]);
-                    ++A_iter;
-                }
-                else if (u_idx > a_idx)
-                {
-                    //std::cerr << "Advancing A_iter" << std::endl;
-                    ++A_iter;
-                }
-                else
-                {
-                    //std::cerr << "Advancing u_iter" << std::endl;
-                    do { ++u_idx; } while ((u_idx < u_vals.size()) && !u_bitmap[u_idx]);
-                }
-            }
-
-            return value_set;
-        }
-#endif
-
         //************************************************************************
         /// A dot product of two sparse vectors (vectors<tuple(index,value)>)
         template <typename D1, typename D2, typename D3, typename SemiringT>
@@ -422,243 +356,9 @@ namespace GraphBLAS
             }
         }
 
-        //********************************************************************
-        // ALL SUPPORT
-        // This is where we turns alls into the correct range
-#if 0
-        template <typename SequenceT>
-        bool searchIndices(SequenceT seq, IndexType n)
-        {
-            for (auto it : seq)
-            {
-                if (it == n) return true;
-            }
-            return false;
-        }
-
-        bool searchIndices(AllIndices seq, IndexType n)
-        {
-            return true;
-        }
-
-        //**********************************************************************
-        /// Apply element-wise operation to union on sparse vectors.
-        /// Indices in the stencil indicate where elements of vec2 should be
-        /// used (whether there is a stored value or not); otherwise the value
-        /// in vec1 should be taken.  Note: that it is assumed that if a value
-        /// is stored in vec2 then the corresponding location is contained in
-        /// stencil indices.
-        ///
-        /// Truth table (for each element, i, of the answer, where '-' means
-        /// no stored value):
-        ///
-        ///  vec1_i   vec2   s_i   ans_i
-        ///    -        -     -      -
-        ///    -        -     x      -
-        ///    -        x --> x    vec2_i
-        ///    x        -     -    vec1_i
-        ///    x        -     x      -    (take vec1_i which is no stored value)
-        ///    x        x --> x    vec1_i
-        ///
-        /// \tparam D1
-        /// \tparam D2
-        /// \tparam D3
-        /// \tparam SequenceT  Could be a out of order subset of indices
-        ///
-        /// \param ans   A row of the answer (Z or z), starts empty
-        /// \param vec1  A row of the output container (C or w), indices increasing order
-        /// \param vec2  A row of the T (or t) container, indices in increasing order
-        /// \param stencil_indices  Assumed to not be in order
-        ///
-        template <typename D1, typename D2, typename D3, typename SequenceT>
-        void ewise_or_stencil(
-            std::vector<std::tuple<GraphBLAS::IndexType,D3> >       &ans,
-            std::vector<std::tuple<GraphBLAS::IndexType,D1> > const &vec1,
-            std::vector<std::tuple<GraphBLAS::IndexType,D2> > const &vec2,
-            SequenceT                                                stencil_indices)
-        {
-            ans.clear();
-
-            //auto stencil_it = stencil_indices.begin();
-            //if (v1_it)
-            //while ((stencil_it != stencil_indices.end()) &&
-            //       (*stencil_it < std::get<0>(*v1_it)))
-            //{
-            //    ++stencil_it;
-            //}
-
-            D1 v1_val;
-            D2 v2_val;
-            GraphBLAS::IndexType v1_idx, v2_idx;
-
-            // loop through both ordered sets to compute ewise_or
-            auto v1_it = vec1.begin();
-            auto v2_it = vec2.begin();
-            while ((v1_it != vec1.end()) || (v2_it != vec2.end()))
-            {
-                if ((v1_it != vec1.end()) && (v2_it != vec2.end()))
-                {
-                    std::tie(v1_idx, v1_val) = *v1_it;
-                    std::tie(v2_idx, v2_val) = *v2_it;
-
-                    // If v1 and v2 both have stored values, it is assumed index
-                    // is in stencil_indices so v2 should be stored
-                    if (v2_idx == v1_idx)
-                    {
-                        ans.push_back(std::make_tuple(
-                                          v2_idx,
-                                          static_cast<D3>(v2_val)));
-
-                        ++v2_it;
-                        ++v1_it;
-                    }
-                    // In this case v1 has a value and not v2.  We need to search
-                    // stencil indices to see if index is present
-                    else if (v1_idx < v2_idx) // advance v1 and annihilate
-                    {
-                        if (!searchIndices(stencil_indices, v1_idx))
-                        {
-                            ans.push_back(std::make_tuple(
-                                    v1_idx,
-                                    static_cast<D3>(v1_val)));
-                        }
-                        ++v1_it;
-                    }
-                    else
-                    {
-                        //std::cerr << "Copying v2, Advancing v2_it" << std::endl;
-                        ans.push_back(std::make_tuple(v2_idx,
-                                                      static_cast<D3>(v2_val)));
-                        ++v2_it;
-                    }
-                }
-                else if (v1_it != vec1.end())  // vec2 exhausted
-                {
-                    std::tie(v1_idx, v1_val) = *v1_it;
-
-                    if (!searchIndices(stencil_indices, v1_idx))
-                    {
-                        ans.push_back(std::make_tuple(
-                                v1_idx,
-                                static_cast<D3>(v1_val)));
-                    }
-                    ++v1_it;
-                }
-                else // v2_it != vec2.end()) and vec1 exhausted
-                {
-                    std::tie(v2_idx, v2_val) = *v2_it;
-                    ans.push_back(std::make_tuple(v2_idx, static_cast<D3>(v2_val)));
-                    ++v2_it;
-                }
-            }
-        }
 
 
-        //**********************************************************************
-        template <typename ZScalarT,
-                  typename WVectorT,
-                  typename TScalarT,
-                  typename SequenceT,
-                  typename BinaryOpT >
-        void ewise_or_stencil_opt_accum_1D(
-            std::vector<std::tuple<GraphBLAS::IndexType,ZScalarT>>       &z,
-            WVectorT const                                               &w,
-            std::vector<std::tuple<GraphBLAS::IndexType,TScalarT>> const &t,
-            SequenceT const                                              &indices,
-            BinaryOpT                                                     accum)
-        {
-            // If there is an accumulate operations, do nothing with the stencil
-            ewise_or(z, w.getContents(), t, accum);
-        }
-
-        //**********************************************************************
-        template <typename ZScalarT,
-                  typename WVectorT,
-                  typename TScalarT,
-                  typename SequenceT>
-        void ewise_or_stencil_opt_accum_1D(
-            std::vector<std::tuple<GraphBLAS::IndexType,ZScalarT>>       &z,
-            WVectorT const                                               &w,
-            std::vector<std::tuple<GraphBLAS::IndexType,TScalarT>> const &t,
-            SequenceT const                                              &indices,
-            GraphBLAS::NoAccumulate)
-        {
-            // If there is no accumulate we need to annihilate stored values
-            // in w that fall in the stencil
-            ewise_or_stencil(z, w.getContents(), t, indices);
-        }
-
-
-        //**********************************************************************
-        template < typename ZMatrixT,
-                   typename CMatrixT,
-                   typename TMatrixT,
-                   typename RowSequenceT,
-                   typename ColSequenceT,
-                   typename BinaryOpT >
-        void ewise_or_stencil_opt_accum(ZMatrixT           &Z,
-                                        CMatrixT const     &C,
-                                        TMatrixT const     &T,
-                                        RowSequenceT const &row_indices,
-                                        ColSequenceT const &col_indices,
-                                        BinaryOpT           accum)
-        {
-            // If there is an accumulate operations, do nothing with the stencil
-            typedef typename ZMatrixT::ScalarType ZScalarType;
-
-            typedef std::vector<std::tuple<IndexType,ZScalarType> > ZRowType;
-
-            ZRowType tmp_row;
-            IndexType nRows(Z.nrows());
-            for (IndexType row_idx = 0; row_idx < nRows; ++row_idx)
-            {
-                ewise_or(tmp_row, C.getRow(row_idx), T.getRow(row_idx), accum);
-                Z.setRow(row_idx, tmp_row);
-            }
-        }
-
-        //**********************************************************************
-        template < typename ZMatrixT,
-                   typename CMatrixT,
-                   typename TMatrixT,
-                   typename RowSequenceT,
-                   typename ColSequenceT>
-        void ewise_or_stencil_opt_accum(ZMatrixT           &Z,
-                                        CMatrixT const     &C,
-                                        TMatrixT const     &T,
-                                        RowSequenceT const &row_indices,
-                                        ColSequenceT const &col_indices,
-                                        GraphBLAS::NoAccumulate)
-        {
-            // If there is no accumulate we need to annihilate stored values
-            // in C that fall in the stencil
-            typedef typename ZMatrixT::ScalarType ZScalarType;
-
-            typedef std::vector<std::tuple<IndexType,ZScalarType> > ZRowType;
-
-            ZRowType tmp_row;
-            IndexType nRows(Z.nrows());
-
-            for (IndexType row_idx = 0; row_idx < nRows; ++row_idx)
-            {
-                if (searchIndices(row_indices, row_idx))
-                {
-                    // Row Stenciled. merge C, T, using col stencil\n";
-                    ewise_or_stencil(tmp_row, C.getRow(row_idx), T.getRow(row_idx),
-                                     col_indices);
-                    Z.setRow(row_idx, tmp_row);
-                }
-                else
-                {
-                    // Row not stenciled.  Take row from C only
-                    // There should be nothing in T for this row
-                    Z.setRow(row_idx, C.getRow(row_idx));
-                }
-            }
-        }
-#endif
-        //**********************************************************************
-        template < typename ZMatrixT,
+       template < typename ZMatrixT,
                    typename CMatrixT,
                    typename TMatrixT,
                    typename BinaryOpT >
@@ -693,43 +393,7 @@ namespace GraphBLAS
         {
             sparse_copy(Z, T);
         }
-#if 0
-        //**********************************************************************
-        template <typename ZScalarT,
-                  typename WVectorT,
-                  typename TScalarT,
-                  typename BinaryOpT>
-        void ewise_or_opt_accum_1D(
-            std::vector<std::tuple<GraphBLAS::IndexType,ZScalarT>>       &z,
-            WVectorT const                                               &w,
-            std::vector<std::tuple<GraphBLAS::IndexType,TScalarT>> const &t,
-            BinaryOpT                                                     accum)
-        {
-            //z.clear();
-            ewise_or(z, w.getContents(), t, accum);
-        }
 
-        //**********************************************************************
-        // Specialized version that gets used when we don't have an accumulator
-        template <typename ZScalarT,
-                  typename WVectorT,
-                  typename TScalarT>
-        void ewise_or_opt_accum_1D(
-            std::vector<std::tuple<GraphBLAS::IndexType,ZScalarT>>       &z,
-            WVectorT const                                               &w,
-            std::vector<std::tuple<GraphBLAS::IndexType,TScalarT>> const &t,
-            GraphBLAS::NoAccumulate )
-        {
-            //sparse_copy(z, t);
-            for (auto tupl: t)
-            {
-                z.push_back(std::make_tuple(
-                                std::get<0>(tupl),
-                                static_cast<ZScalarT>(std::get<1>(tupl))));
-            }
-        }
-#endif
-        //**********************************************************************
         template <typename ZScalarT,
                   typename WScalarT,
                   typename TScalarT,
@@ -742,7 +406,6 @@ namespace GraphBLAS
             z = static_cast<ZScalarT>(accum(w, t));
         }
 
-        //**********************************************************************
         // Specialized version that gets used when we don't have an accumulator
         template <typename ZScalarT,
                   typename WScalarT,
@@ -756,51 +419,6 @@ namespace GraphBLAS
         }
 
         //************************************************************************
-        /// Apply element-wise operation to intersection of sparse vectors.
-        template <typename D1, typename D2, typename D3, typename BinaryOpT>
-        void ewise_and(std::vector<std::tuple<GraphBLAS::IndexType,D3> >       &ans,
-                       std::vector<std::tuple<GraphBLAS::IndexType,D1> > const &vec1,
-                       std::vector<std::tuple<GraphBLAS::IndexType,D2> > const &vec2,
-                       BinaryOpT                                                op)
-        {
-            ans.clear();
-            auto v1_it = vec1.begin();
-            auto v2_it = vec2.begin();
-
-            D1 v1_val;
-            D2 v2_val;
-            GraphBLAS::IndexType v1_idx, v2_idx;
-
-            // loop through both ordered sets to compute ewise_or
-            while ((v1_it != vec1.end()) && (v2_it != vec2.end()))
-            {
-                std::tie(v1_idx, v1_val) = *v1_it;
-                std::tie(v2_idx, v2_val) = *v2_it;
-
-                if (v2_idx == v1_idx)
-                {
-                    //std::cerr << ans << " + " << v1_val << " * " << v2_val << " = ";
-                    ans.push_back(std::make_tuple(v1_idx,
-                                                  static_cast<D3>(op(v1_val, v2_val))));
-                    //std::cerr << ans << std::endl;
-
-                    ++v2_it;
-                    ++v1_it;
-                }
-                else if (v2_idx > v1_idx)
-                {
-                    //std::cerr << "Advancing v1_it" << std::endl;
-                    ++v1_it;
-                }
-                else
-                {
-                    //std::cerr << "Advancing v2_it" << std::endl;
-                    ++v2_it;
-                }
-            }
-        }
-
-        //**********************************************************************
         //**********************************************************************
         /**
          * This merges the values of C and Z into the result vector based on the
@@ -966,8 +584,7 @@ namespace GraphBLAS
         {
             sparse_copy(C, Z);
         }
-
-        //**********************************************************************
+/*
         // Vector version
 
         template <typename WVectorT,
@@ -989,7 +606,6 @@ namespace GraphBLAS
             w.setContents(tmp_row);
         }
 
-        //**********************************************************************
         // Vector version specialized for no mask
 
         template <typename WVectorT,
@@ -1004,7 +620,6 @@ namespace GraphBLAS
             w.setContents(z);
         }
 
-        //********************************************************************
         // Index-out-of-bounds is an execution error and a responsibility of
         // the backend.
         template <typename SequenceT>
@@ -1023,23 +638,9 @@ namespace GraphBLAS
                 }
             }
         }
-#if 0
-        //********************************************************************
-        // ALL SUPPORT
-        // This is where we turns alls into the correct range
+*/
 
-        template <typename SequenceT>
-        SequenceT setupIndices(SequenceT seq, IndexType n)
-        {
-            return seq;
-        }
-
-        IndexSequenceRange setupIndices(AllIndices seq, IndexType n)
-        {
-            return IndexSequenceRange(0, n);
-        }
-#endif
-    } // backend
+   } // backend
 } // GraphBLAS
 
 #endif

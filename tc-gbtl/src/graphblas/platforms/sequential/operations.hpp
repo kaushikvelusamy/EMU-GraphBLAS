@@ -29,12 +29,14 @@
 #include <iterator>
 
 #include <graphblas/algebra.hpp>
+
+#include <graphblas/platforms/sequential/sparse_mxm.hpp>
+#include <graphblas/platforms/sequential/sparse_reduce.hpp>
+
+
+/*
 //#include <graphblas/platforms/sequential/TransposeView.hpp>
 //#include <graphblas/platforms/sequential/ComplementView.hpp>
-
-// Add individual operation files here
-#include <graphblas/platforms/sequential/sparse_mxm.hpp>
-/*
 #include <graphblas/platforms/sequential/sparse_mxv.hpp>
 #include <graphblas/platforms/sequential/sparse_vxm.hpp>
 #include <graphblas/platforms/sequential/sparse_ewisemult.hpp>
@@ -42,19 +44,15 @@
 #include <graphblas/platforms/sequential/sparse_extract.hpp>
 #include <graphblas/platforms/sequential/sparse_assign.hpp>
 #include <graphblas/platforms/sequential/sparse_apply.hpp>
+#include <graphblas/platforms/sequential/sparse_transpose.hpp>
 */
-#include <graphblas/platforms/sequential/sparse_reduce.hpp>
-//#include <graphblas/platforms/sequential/sparse_transpose.hpp>
 
+/*
 
 namespace GraphBLAS
 {
     namespace backend
     {
-        /**
-         *
-         */
-
         template<typename MatrixT>
         inline MatrixComplementView<MatrixT> matrix_complement(MatrixT const &Mask)
         {
@@ -68,9 +66,6 @@ namespace GraphBLAS
         }
 #endif
 
-        /**
-         *
-         */
         template<typename MatrixT>
         inline TransposeView<MatrixT> transpose(MatrixT const &A)
         {
@@ -80,4 +75,5 @@ namespace GraphBLAS
     } // backend
 } // GraphBLAS
 
+*/
 #endif // GB_SEQUENTIAL_OPERATIONS_HPP

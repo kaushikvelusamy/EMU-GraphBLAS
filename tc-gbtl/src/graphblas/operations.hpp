@@ -23,11 +23,6 @@
 
 #include <graphblas/algebra.hpp>
 #include <graphblas/Matrix.hpp>
-#include <graphblas/detail/logging.h>
-#include <graphblas/detail/config.hpp>
-
-//#include <graphblas/detail/checks.hpp>
-//#include <graphblas/indices.hpp>
 
 #define GB_INCLUDE_BACKEND_TRANSPOSE_VIEW 1
 #define GB_INCLUDE_BACKEND_COMPLEMENT_VIEW 1
@@ -60,27 +55,10 @@ namespace GraphBLAS
                     BMatrixT   const &B,
                     bool              replace_flag = false)
     {
-        GRB_LOG_FN_BEGIN("mxm - 4.3.1 - matrix-matrix multiply");
-        GRB_LOG_VERBOSE("C in :" << C.m_mat);
-        GRB_LOG_VERBOSE("Mask in : " << Mask.m_mat);
-        GRB_LOG_VERBOSE_ACCUM(accum);
-        GRB_LOG_VERBOSE_OP(op);
-        GRB_LOG_VERBOSE("A in :" << A.m_mat);
-        GRB_LOG_VERBOSE("B in :" << B.m_mat);
-        GRB_LOG_VERBOSE_REPLACE(replace_flag);
-
- /*       check_nrows_nrows(C, Mask, "mxm: C.nrows != Mask.nrows");
-        check_ncols_ncols(C, Mask, "mxm: C.ncols != Mask.ncols");
-        check_nrows_nrows(C, A, "mxm: C.nrows != A.nrows");
-        check_ncols_ncols(C, B, "mxm: C.ncols != B.ncols");
-        check_ncols_nrows(A, B, "mxm: A.ncols != B.nrows");
-*/
-        backend::mxm(C.m_mat, Mask.m_mat, accum, op, A.m_mat, B.m_mat,
+       backend::mxm(C.m_mat, Mask.m_mat, accum, op, A.m_mat, B.m_mat,
                      replace_flag);
 
-        GRB_LOG_VERBOSE("C (Result): " << C.m_mat);
-        GRB_LOG_FN_END("mxm - 4.3.1 - matrix-matrix multiply");
-    }
+  }
 
 
 
@@ -99,19 +77,8 @@ namespace GraphBLAS
             MonoidT                            op,
             Matrix<AScalarT, ATagsT...> const &A)
     {
-        GRB_LOG_FN_BEGIN("reduce - 4.3.9.3 - matrix to scalar variant");
-        GRB_LOG_VERBOSE("val in: " << val);
-        GRB_LOG_VERBOSE_ACCUM(accum);
-        GRB_LOG_VERBOSE_OP(op);
-        GRB_LOG_VERBOSE("A in: " << A.m_mat);
-
-        backend::reduce_matrix_to_scalar(val, accum, op, A.m_mat);
-
-        GRB_LOG_VERBOSE("val out: " << val);
-        GRB_LOG_FN_END("reduce - 4.3.9.3 - matrix to scalar variant");
+      backend::reduce_matrix_to_scalar(val, accum, op, A.m_mat);
     }
-
-
 
 
  } // GraphBLAS

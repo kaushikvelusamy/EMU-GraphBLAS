@@ -28,7 +28,7 @@
 #include <iostream>
 #include <chrono>
 
-#include <graphblas/detail/logging.h>
+//#include <graphblas/detail/logging.h>
 #include <graphblas/types.hpp>
 #include <graphblas/algebra.hpp>
 
@@ -109,7 +109,7 @@ namespace GraphBLAS
                 }
             }
 
-            GRB_LOG_VERBOSE("T: " << T);
+            //GRB_LOG_VERBOSE("T: " << T);
 
             // =================================================================
             // Accumulate into Z
@@ -121,7 +121,7 @@ namespace GraphBLAS
 
             ewise_or_opt_accum(Z, C, T, accum);
 
-            GRB_LOG_VERBOSE("Z: " << Z);
+            //GRB_LOG_VERBOSE("Z: " << Z);
 
             // =================================================================
             // Copy Z into the final output considering mask and replace

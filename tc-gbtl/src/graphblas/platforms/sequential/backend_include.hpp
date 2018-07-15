@@ -26,14 +26,19 @@
 #undef GB_INCLUDE_BACKEND_MATRIX
 #endif
 
-#if(GB_INCLUDE_BACKEND_VECTOR)
-//#include <graphblas/platforms/sequential/Vector.hpp>
-#undef GB_INCLUDE_BACKEND_VECTOR
+#if(GB_INCLUDE_BACKEND_OPERATIONS)
+#include <graphblas/platforms/sequential/operations.hpp>
+#undef GB_INCLUDE_BACKEND_OPERATIONS
 #endif
 
 #if(GB_INCLUDE_BACKEND_UTILITY)
-#include <graphblas/platforms/sequential/utility.hpp>
+//#include <graphblas/platforms/sequential/utility.hpp>
 #undef GB_INCLUDE_BACKEND_UTILITY
+#endif
+
+#if(GB_INCLUDE_BACKEND_VECTOR)
+//#include <graphblas/platforms/sequential/Vector.hpp>
+#undef GB_INCLUDE_BACKEND_VECTOR
 #endif
 
 #if(GB_INCLUDE_BACKEND_TRANSPOSE_VIEW)
@@ -46,7 +51,3 @@
 #undef GB_INCLUDE_BACKEND_COMPLEMENT_VIEW
 #endif
 
-#if(GB_INCLUDE_BACKEND_OPERATIONS)
-#include <graphblas/platforms/sequential/operations.hpp>
-#undef GB_INCLUDE_BACKEND_OPERATIONS
-#endif

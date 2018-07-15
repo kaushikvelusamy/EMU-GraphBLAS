@@ -16,8 +16,6 @@
 #include <fstream>
 #include <chrono>
 
-#define GRAPHBLAS_DEBUG 1
-
 #include <graphblas/graphblas.hpp>
 #include <algorithms/triangle_count.hpp>
 

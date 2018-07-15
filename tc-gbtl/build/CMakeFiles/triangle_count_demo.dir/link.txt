@@ -1,1 +1,0 @@
-/usr/bin/c++      CMakeFiles/triangle_count_demo.dir/demo/triangle_count_demo.cpp.o  -o bin/triangle_count_demo -rdynamic 

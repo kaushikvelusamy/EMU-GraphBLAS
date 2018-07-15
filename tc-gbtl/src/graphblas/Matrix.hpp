@@ -17,7 +17,6 @@
 
 #include <cstddef>
 #include <type_traits>
-#include <graphblas/detail/config.hpp>
 #include <graphblas/detail/param_unpack.hpp>
 
 #define GB_INCLUDE_BACKEND_MATRIX 1
@@ -289,41 +288,7 @@ namespace GraphBLAS
                                BMatrixT   const &B,
                                bool              replace_flag);
 
-        //--------------------------------------------------------------------
-
-        // 4.3.2:
-        template<typename WVectorT,
-                 typename MaskT,
-                 typename AccumT,
-                 typename SemiringT,
-                 typename UVectorT,
-                 typename AMatrixT>
-        friend inline void vxm(WVectorT         &w,
-                               MaskT      const &mask,
-                               AccumT            accum,
-                               SemiringT         op,
-                               UVectorT   const &u,
-                               AMatrixT   const &A,
-                               bool              replace_flag);
-
-        //--------------------------------------------------------------------
-
-        // 4.3.3
-        template<typename WVectorT,
-                 typename MaskT,
-                 typename AccumT,
-                 typename SemiringT,
-                 typename AMatrixT,
-                 typename UVectorT>
-        friend inline void mxv(WVectorT        &w,
-                               MaskT     const &mask,
-                               AccumT           accum,
-                               SemiringT        op,
-                               AMatrixT  const &A,
-                               UVectorT  const &u,
-                               bool             replace_flag);
-
-        //--------------------------------------------------------------------
+       //--------------------------------------------------------------------
 
         // 4.3.4.2:
         template<typename CScalarT,
@@ -577,6 +542,7 @@ namespace GraphBLAS
      *
      *  @deprecated - use ostream inserter
      */
+/*
     template <typename MatrixT>
     void print_matrix(std::ostream      &ostr,
                       MatrixT const     &mat,
@@ -588,7 +554,7 @@ namespace GraphBLAS
         backend::pretty_print_matrix(ostr, mat.m_mat);
     }
 
-
+*/
     template<typename ScalarT, typename... TagsT>
     std::ostream &operator<<(std::ostream &os, const Matrix<ScalarT, TagsT...> &mat)
     {
