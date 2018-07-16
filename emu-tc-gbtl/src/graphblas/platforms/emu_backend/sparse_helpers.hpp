@@ -1,22 +1,3 @@
-/*
- * Copyright (c) 2017 Carnegie Mellon University.
- * All Rights Reserved.
- *
- * THIS SOFTWARE IS PROVIDED "AS IS," WITH NO WARRANTIES WHATSOEVER. CARNEGIE
- * MELLON UNIVERSITY EXPRESSLY DISCLAIMS TO THE FULLEST EXTENT PERMITTED BY
- * LAW ALL EXPRESS, IMPLIED, AND STATUTORY WARRANTIES, INCLUDING, WITHOUT
- * LIMITATION, THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
- * PURPOSE, AND NON-INFRINGEMENT OF PROPRIETARY RIGHTS.
- *
- * This Program is distributed under a BSD license.  Please see LICENSE file or
- * permission@sei.cmu.edu for more information.  DM-0002659
- */
-
-/**
- * Implementations of all GraphBLAS functions optimized for the sequential
- * (CPU) backend.
- */
-
 #ifndef GB_SEQUENTIAL_SPARSE_HELPERS_HPP
 #define GB_SEQUENTIAL_SPARSE_HELPERS_HPP
 
@@ -29,37 +10,11 @@
 #include <iostream>
 #include <string>
 #include <graphblas/algebra.hpp>
-//#include <graphblas/indices.hpp>
-
-//****************************************************************************
 
 namespace GraphBLAS
 {
     namespace backend
     {
-/*        template <typename ScalarT>
-        void print_vec(std::ostream &os, std::string label,
-                       std::vector<std::tuple<IndexType, ScalarT> > vec)
-        {
-            auto vec_it = vec.begin();
-            bool first = true;
-
-            IndexType idx;
-            ScalarT val;
-
-            os << label << " ";
-            while (vec_it != vec.end())
-            {
-                std::tie(idx, val) = *vec_it;
-                os << (!first ? "," : " ") << idx << ":" << val;
-                first = false;
-                ++vec_it;
-            }
-            os << std::endl;
-        }
-*/
-        //**********************************************************************
-
         template <typename DstMatrixT,
                   typename SrcMatrixT>
         void sparse_copy(DstMatrixT &dstMatrix,
@@ -584,61 +539,6 @@ namespace GraphBLAS
         {
             sparse_copy(C, Z);
         }
-/*
-        // Vector version
-
-        template <typename WVectorT,
-                  typename ZScalarT,
-                  typename MaskT>
-        void write_with_opt_mask_1D(
-            WVectorT                                           &w,
-            std::vector<std::tuple<IndexType, ZScalarT>> const &z,
-            MaskT const                                        &mask,
-            bool                                                replace)
-        {
-            typedef typename WVectorT::ScalarType WScalarType;
-            std::vector<std::tuple<IndexType, WScalarType> > tmp_row;
-
-            apply_with_mask(tmp_row, w.getContents(), z,
-                            mask.getContents(), replace);
-
-            // Now, set the new one.  Yes, we can optimize this later
-            w.setContents(tmp_row);
-        }
-
-        // Vector version specialized for no mask
-
-        template <typename WVectorT,
-                  typename ZScalarT>
-        void write_with_opt_mask_1D(
-            WVectorT                                           &w,
-            std::vector<std::tuple<IndexType, ZScalarT>> const &z,
-            backend::NoMask const                              &foo,
-            bool                                                replace)
-        {
-            //sparse_copy(w, z);
-            w.setContents(z);
-        }
-
-        // Index-out-of-bounds is an execution error and a responsibility of
-        // the backend.
-        template <typename SequenceT>
-        void check_index_array_content(SequenceT const   &array,
-                                       IndexType          dim,
-                                       std::string const &msg)
-        {
-            if (!IsAllSequence(array))
-            {
-                for (auto ix : array)
-                {
-                    if (ix >= dim)
-                    {
-                        std::cerr<<"throw IndexOutOfBoundsException(msg)";
-                    }
-                }
-            }
-        }
-*/
 
    } // backend
 } // GraphBLAS

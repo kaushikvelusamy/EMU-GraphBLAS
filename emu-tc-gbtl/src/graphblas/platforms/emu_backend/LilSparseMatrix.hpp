@@ -1,18 +1,3 @@
-/*
- * Copyright (c) 2017 Carnegie Mellon University.
- * All Rights Reserved.
- *
- * THIS SOFTWARE IS PROVIDED "AS IS," WITH NO WARRANTIES WHATSOEVER. CARNEGIE
- * MELLON UNIVERSITY EXPRESSLY DISCLAIMS TO THE FULLEST EXTENT PERMITTED BY
- * LAW ALL EXPRESS, IMPLIED, AND STATUTORY WARRANTIES, INCLUDING, WITHOUT
- * LIMITATION, THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
- * PURPOSE, AND NON-INFRINGEMENT OF PROPRIETARY RIGHTS.
- *
- * This Program is distributed under a BSD license.  Please see LICENSE file or
- * permission@sei.cmu.edu for more information.  DM-0002659
-Note exception to CERROR
-*/
-
 #ifndef GB_SEQUENTIAL_LILSPARSEMATRIX_HPP
 #define GB_SEQUENTIAL_LILSPARSEMATRIX_HPP
 
@@ -557,97 +542,7 @@ namespace GraphBLAS
                     }
                 }
             }
-/*
-            // output specific to the storage layout of this type of matrix
-            void printInfo(std::ostream &os) const
-            {
-                // Used to print data in storage format instead of like a matrix
-                #ifdef GRB_SEQUENTIAL_MATRIX_PRINT_STORAGE
-                    os << "LilSparseMatrix<" << typeid(ScalarT).name() << ">"
-                       << std::endl;
-                    os << "dimensions: " << m_num_rows << " x " << m_num_cols
-                       << std::endl;
-                    os << "num stored values = " << m_nvals << std::endl;
-                    for (IndexType row = 0; row < m_data.size(); ++row)
-                    {
-                        os << row << " :";
-                        for (auto it = m_data[row].begin();
-                             it != m_data[row].end();
-                             ++it)
-                        {
-                            os << " " << std::get<0>(*it)
-                               << ":" << std::get<1>(*it);
-                        }
-                        os << std::endl;
-                    }
-                #else
-                    typedef std::vector<std::tuple<IndexType, ScalarT>> const & RowType;
-
-                    IndexType num_rows = nrows();
-                    IndexType num_cols = ncols();
-
-                    os << "(" << num_rows << "x" << num_cols << ")" << std::endl;
-
-                    for (IndexType row_idx = 0; row_idx < num_rows; ++row_idx)
-                    {
-                        // We like to start with a little whitespace indent
-                        os << ((row_idx == 0) ? "  [[" : "   [");
-
-                        RowType const &row(getRow(row_idx));
-                        IndexType curr_idx = 0;
-
-                        if (row.empty())
-                        {
-                            while (curr_idx < num_cols)
-                            {
-                                os << ((curr_idx == 0) ? " " : ",  " );
-                                ++curr_idx;
-                            }
-                        }
-                        else
-                        {
-                            // Now walk the columns.  A sparse iter would be handy here...
-                            IndexType col_idx;
-                            ScalarT cell_val;
-
-                            auto row_it = row.begin();
-                            while (row_it != row.end())
-                            {
-                                std::tie(col_idx, cell_val) = *row_it;
-                                while (curr_idx < col_idx)
-                                {
-                                    os << ((curr_idx == 0) ? " " : ",  " );
-                                    ++curr_idx;
-                                }
-
-                                if (curr_idx != 0)
-                                    os << ", ";
-                                os << cell_val;
-
-                                ++row_it;
-                                ++curr_idx;
-                            }
-
-                            // Fill in the rest to the end
-                            while (curr_idx < num_cols)
-                            {
-                                os << ",  ";
-                                ++curr_idx;
-                            }
-                        }
-                        os << ((row_idx == num_rows - 1 ) ? "]]" : "]\n");
-                    }
-                #endif
-            }
-
-            friend std::ostream &operator<<(std::ostream             &os,
-                                            LilSparseMatrix<ScalarT> const &mat)
-            {
-                mat.printInfo(os);
-                return os;
-            }
-*/
-        private:
+       private:
             IndexType m_num_rows;
             IndexType m_num_cols;
             IndexType m_nvals;

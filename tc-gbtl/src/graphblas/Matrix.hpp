@@ -35,13 +35,13 @@ namespace GraphBLAS
 
     template<typename ScalarT, typename... TagsT>
     class Matrix;
-
+/*
     template<typename MatrixT>
     class TransposeView;
 
     template<typename MatrixT>
     class MatrixComplementView;
-
+*/
     //************************************************************************
     template<typename ScalarT, typename... TagsT>
     class Matrix
@@ -264,13 +264,13 @@ namespace GraphBLAS
                                 values.begin());
         }
 
-        /// This replaces operator<< and outputs implementation specific
+      /*  /// This replaces operator<< and outputs implementation specific
         /// information.
         void printInfo(std::ostream &os) const
         {
             m_mat.printInfo(os);
         }
-
+*/
     private:
 
         // 4.3.1:
@@ -288,28 +288,62 @@ namespace GraphBLAS
                                BMatrixT   const &B,
                                bool              replace_flag);
 
-       //--------------------------------------------------------------------
-
-        // 4.3.4.2:
-        template<typename CScalarT,
+       // 4.3.9.1
+        template<typename WVectorT,
                  typename MaskT,
                  typename AccumT,
-                 typename BinaryOpT,  //can be BinaryOp, Monoid (not Semiring)
-                 typename AMatrixT,
-                 typename BMatrixT,
-                 typename... CTagsT>
-        friend inline void eWiseMult(
-            GraphBLAS::Matrix<CScalarT, CTagsT...> &C,
-            MaskT                            const &Mask,
-            AccumT                                  accum,
-            BinaryOpT                               op,
-            AMatrixT                         const &A,
-            BMatrixT                         const &B,
-            bool                                    replace_flag);
+                 typename BinaryOpT,  // monoid or binary op only
+                 typename AMatrixT>
+        friend inline void reduce(WVectorT        &u,
+                                  MaskT     const &mask,
+                                  AccumT           accum,
+                                  BinaryOpT        op,
+                                  AMatrixT  const &A,
+                                  bool             replace_flag);
+
+        // 4.3.9.3
+        template<typename ValueT,
+                 typename AccumT,
+                 typename MonoidT, // monoid only
+                 typename AScalarT,
+                 typename... ATagsT>
+        friend inline void reduce(
+            ValueT                                       &dst,
+            AccumT                                        accum,
+            MonoidT                                       op,
+            GraphBLAS::Matrix<AScalarT, ATagsT...> const &A);
+
+
+    private:
+        BackendType m_mat;
+    };
+
+    class NoMask
+    {
+    public:
+        typedef bool ScalarType; // not necessary?
+        typedef backend::NoMask BackendType; // not necessary?
+
+        backend::NoMask m_mat;  // can be const?
+        backend::NoMask m_vec;
+    };
+
+    
+/*
+      template<typename ScalarT, typename... TagsT>
+    std::ostream &operator<<(std::ostream &os, const Matrix<ScalarT, TagsT...> &mat)
+    {
+        mat.printInfo(os);
+        return os;
+    }
+*/
+} // end namespace GraphBLAS
+
+
 
         //--------------------------------------------------------------------
 
-        // 4.3.5.2
+/*        // 4.3.5.2
         template<typename CScalarT,
                  typename MaskT,
                  typename AccumT,
@@ -344,6 +378,27 @@ namespace GraphBLAS
                 RowSequenceT        const   &row_indices,
                 ColSequenceT        const   &col_indices,
                 bool                         replace_flag);
+*/
+
+       //--------------------------------------------------------------------
+/*
+        // 4.3.4.2:
+        template<typename CScalarT,
+                 typename MaskT,
+                 typename AccumT,
+                 typename BinaryOpT,  //can be BinaryOp, Monoid (not Semiring)
+                 typename AMatrixT,
+                 typename BMatrixT,
+                 typename... CTagsT>
+        friend inline void eWiseMult(
+            GraphBLAS::Matrix<CScalarT, CTagsT...> &C,
+            MaskT                            const &Mask,
+            AccumT                                  accum,
+            BinaryOpT                               op,
+            AMatrixT                         const &A,
+            BMatrixT                         const &B,
+            bool                                    replace_flag);
+
 
         // 4.3.6.3
         template<typename WScalarT,
@@ -361,9 +416,12 @@ namespace GraphBLAS
                 IndexType             col_index,
                 bool                  replace_flag);
 
+*/
+ 
+
         //--------------------------------------------------------------------
         // 4.3.7.2
-        template<typename CMatrixT,
+/*        template<typename CMatrixT,
                  typename MaskT,
                  typename AccumT,
                  typename AMatrixT,
@@ -448,34 +506,9 @@ namespace GraphBLAS
                 bool                                             replace_flag);
 
         //--------------------------------------------------------------------
-
-        // 4.3.9.1
-        template<typename WVectorT,
-                 typename MaskT,
-                 typename AccumT,
-                 typename BinaryOpT,  // monoid or binary op only
-                 typename AMatrixT>
-        friend inline void reduce(WVectorT        &u,
-                                  MaskT     const &mask,
-                                  AccumT           accum,
-                                  BinaryOpT        op,
-                                  AMatrixT  const &A,
-                                  bool             replace_flag);
-
-        // 4.3.9.3
-        template<typename ValueT,
-                 typename AccumT,
-                 typename MonoidT, // monoid only
-                 typename AScalarT,
-                 typename... ATagsT>
-        friend inline void reduce(
-            ValueT                                       &dst,
-            AccumT                                        accum,
-            MonoidT                                       op,
-            GraphBLAS::Matrix<AScalarT, ATagsT...> const &A);
-
+*/
         //--------------------------------------------------------------------
-
+/*
         // 4.3.10
         template<typename CMatrixT,
                  typename MaskT,
@@ -512,19 +545,19 @@ namespace GraphBLAS
         BackendType m_mat;
     };
 
-    //**************************************************************************
+    **************************************************************************
     // GrB_NULL mask: should be GrB_FULL
     class NoMask
     {
     public:
         typedef bool ScalarType; // not necessary?
-        typedef backend::NoMask BackendType; // not necessary?
+       typedef backend::NoMask BackendType; // not necessary?
 
         backend::NoMask m_mat;  // can be const?
         backend::NoMask m_vec;
     };
 
-    //**************************************************************************
+    **************************************************************************
     // Currently these won't work because of include order.
     /// @todo move all these to backend::sparse_helpers
 
@@ -532,7 +565,7 @@ namespace GraphBLAS
 
     // ================================================
 
-    /**
+    
      *  @brief Output the matrix in array form.  Mainly for debugging
      *         small matrices.
      *
@@ -554,7 +587,7 @@ namespace GraphBLAS
         backend::pretty_print_matrix(ostr, mat.m_mat);
     }
 
-*/
+
     template<typename ScalarT, typename... TagsT>
     std::ostream &operator<<(std::ostream &os, const Matrix<ScalarT, TagsT...> &mat)
     {
@@ -563,3 +596,4 @@ namespace GraphBLAS
     }
 
 } // end namespace GraphBLAS
+*/

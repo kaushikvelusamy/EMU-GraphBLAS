@@ -1,37 +1,9 @@
-/*
- * Copyright (c) 2015 Carnegie Mellon University and The Trustees of Indiana
- * University.
- * All Rights Reserved.
- *
- * THIS SOFTWARE IS PROVIDED "AS IS," WITH NO WARRANTIES WHATSOEVER. CARNEGIE
- * MELLON UNIVERSITY AND THE TRUSTEES OF INDIANA UNIVERSITY EXPRESSLY DISCLAIM
- * TO THE FULLEST EXTENT PERMITTED BY LAW ALL EXPRESS, IMPLIED, AND STATUTORY
- * WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT OF PROPRIETARY RIGHTS.
- *
- * This Program is distributed under a BSD license.  Please see LICENSE file or
- * permission@sei.cmu.edu for more information.  DM-0002659
- */
 #pragma once
-//matrix tags should be strictly internal
 #include "matrix_tags.hpp"
-
-#define GB_INCLUDE_BACKEND_MATRIX 1
-#define GB_INCLUDE_BACKEND_VECTOR 1
 #include <backend_include.hpp>
-
-//#define __GB_SYSTEM_MATRIX_HEADER <graphblas/system/__GB_SYSTEM_ROOT/Matrix.hpp>
-//#include __GB_SYSTEM_MATRIX_HEADER
-//#undef __GB_SYSTEM_MATRIX_HEADER
-//
-//#define __GB_SYSTEM_VECTOR_HEADER <graphblas/system/__GB_SYSTEM_ROOT/Vector.hpp>
-//#include __GB_SYSTEM_VECTOR_HEADER
-//#undef __GB_SYSTEM_VECTOR_HEADER
+#define GB_INCLUDE_BACKEND_MATRIX 1
 
 //this file contains the variadic template parameters unpacking utility.
-
-//****************************************************************************
-//****************************************************************************
 
 
 namespace GraphBLAS
@@ -112,37 +84,5 @@ namespace GraphBLAS
             };
         };
 
-/*
-#if 0
-        /// @todo remove directedness from the vector generator
-        struct vector_generator {
-            // recursive call: shaves off one of the tags and puts it in the right
-            // place (no error checking yet)
-            template<typename ScalarT, typename Sparseness,
-                typename InputTag, typename... Tags>
-            struct result {
-                using type = typename result<ScalarT,
-                      typename detail::substitute<Sparseness, InputTag >::type,
-                      Tags... >::type;
-            };
-
-            //null tag shortcut:
-            template<typename ScalarT, typename Sparseness>
-            struct result<ScalarT, Sparseness, detail::NullTag>
-            {
-                using type = typename backend::Vector<ScalarT,
-                      typename detail::substitute<Sparseness, detail::NullTag >::type >;
-            };
-
-            // base case returns the vector from the backend
-            template<typename ScalarT, typename Sparseness, typename InputTag>
-            struct result<ScalarT, Sparseness, InputTag>
-            {
-                using type = typename backend::Vector<ScalarT,
-                      typename detail::substitute<Sparseness, InputTag >::type > ;
-            };
-        };
-#endif
-*/
     }//end detail
 }

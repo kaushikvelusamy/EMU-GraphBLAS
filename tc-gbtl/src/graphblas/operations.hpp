@@ -24,8 +24,6 @@
 #include <graphblas/algebra.hpp>
 #include <graphblas/Matrix.hpp>
 
-#define GB_INCLUDE_BACKEND_TRANSPOSE_VIEW 1
-#define GB_INCLUDE_BACKEND_COMPLEMENT_VIEW 1
 #define GB_INCLUDE_BACKEND_OPERATIONS 1
 
 #include <backend_include.hpp>

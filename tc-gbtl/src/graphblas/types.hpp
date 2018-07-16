@@ -29,42 +29,16 @@ namespace GraphBLAS
     typedef uint64_t IndexType;
     typedef std::vector<IndexType> IndexArrayType;
 
-    //**************************************************************************
-    struct NoAccumulate
+	 struct NoAccumulate
     {
         // It doesn't really matter what the type is, it never gets executed.
         typedef bool result_type;
         inline bool operator()(bool lhs, bool rhs) { return true; }
     };
 
-
-    //**************************************************************************
-
     // This is the "Matrix" class for this example
     struct matrix_tag {};
 
-    // This is the "Vector" class for this example
-    struct vector_tag {};
-
-
 } // namespace GraphBLAS
-
-namespace std
-{
-
-// @TODO; It seems that unit tests can't find this!
-    inline std::ostream &
-    operator<<(std::ostream &os, const std::vector<long unsigned int> vec)
-    {
-        bool first = true;
-        for (auto it = vec.begin(); it != vec.end(); ++it)
-        {
-            os << (first ? "" : ",") << *it;
-            first = false;
-        }
-        return os;
-    }
-
-} // namespace std
 
 #endif // GB_TYPES_HPP
