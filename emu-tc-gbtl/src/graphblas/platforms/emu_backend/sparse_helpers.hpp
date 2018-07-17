@@ -375,13 +375,14 @@ namespace GraphBLAS
 
         //************************************************************************
         //**********************************************************************
+        //**********************************************************************
         /**
          * This merges the values of C and Z into the result vector based on the
          * values of the mask.
          *
          * If replace:
          *
-         * L(C) = {(i,j,Zij):(i,j) \in (ind(Z) \cap ind(M))}
+         * L(C) = \f[ {(i,j,Zij):(i,j) \in (ind(Z) \cap ind(M))} \f]
          *
          * If NOT replace:
          *
@@ -391,6 +392,7 @@ namespace GraphBLAS
          * @tparam CScalarT The scalar type of the C vector input AND result.
          * @tparam ZScalarT The scalar type of the Z vector input.
          * @tparam MScalarT The scalar type of the mask vector.
+         *
          * @param result Result vector.  We clear this first.
          * @param c_vec The original c values that may be carried through.
          * @param z_vec The new values to insert/overlay.

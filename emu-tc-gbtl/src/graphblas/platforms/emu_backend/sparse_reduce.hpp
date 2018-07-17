@@ -22,7 +22,7 @@ namespace GraphBLAS
                  typename AccumT,
                  typename MonoidT, // monoid only
                  typename AMatrixT>
-        inline void reduce_matrix_to_scalar(ValueT         &val,
+        inline Info reduce_matrix_to_scalar(ValueT         &val,
                                             AccumT          accum,
                                             MonoidT         op,
                                             AMatrixT const &A)
@@ -63,6 +63,7 @@ namespace GraphBLAS
 
             // Copy Z into the final output
             val = z;
+            return SUCCESS;
         }
 
     } // backend

@@ -55,7 +55,7 @@ namespace GraphBLAS
                         std::cerr << "throw DimensionException(\"LilSparseMatix(dense ctor)\")\n";
                     }
 
-                    for (IndexType jj = 0; jj < m_num_cols; jj++)
+                    for (IndexType jj = 0; jj < val[ii].size(); jj++)
                     {
                         m_data[ii].push_back(std::make_tuple(jj, val[ii][jj]));
                         m_nvals = m_nvals + 1;
@@ -78,7 +78,7 @@ namespace GraphBLAS
                         std::cerr<<"throw DimensionException(\"LilSparseMatix(dense ctor)\")\n";
                     }
 
-                    for (IndexType jj = 0; jj < m_num_cols; jj++)
+                    for (IndexType jj = 0; jj < val[ii].size(); jj++)
                     {
                         if (val[ii][jj] != zero)
                         {
@@ -139,7 +139,7 @@ namespace GraphBLAS
                      typename RAIteratorJ,
                      typename RAIteratorV,
                      typename DupT>
-            void build(RAIteratorI  i_it,
+            Info build(RAIteratorI  i_it,
                        RAIteratorJ  j_it,
                        RAIteratorV  v_it,
                        IndexType    n,
@@ -156,6 +156,7 @@ namespace GraphBLAS
                     setElement(*i_it, *j_it, *v_it, dup);
                     ++i_it; ++j_it; ++v_it;
                 }
+                return SUCCESS;
             }
 
             void clear()
@@ -194,7 +195,6 @@ namespace GraphBLAS
                     return false;
                 }
 
-                IndexType ind;
                 ScalarT val;
                 //for (auto tupl : m_data[irow])// Range-based loop, access by value
                 for (auto tupl : m_data.at(irow))// Range-based loop, access by value
@@ -223,16 +223,12 @@ namespace GraphBLAS
                     std::cerr<<"throw NoValueException('get_value_at: no entry at index')";
                 }
 
-                IndexType ind;
                 ScalarT val;
                 //for (auto tupl : m_data[irow])// Range-based loop, access by value
                 for (auto tupl : m_data.at(irow))// Range-based loop, access by value
                 {
-                    //std::tie(ind, val) = tupl;
-                    //if (ind == icol)
                     if (std::get<0>(tupl) == icol)
                     {
-                        //return val;
                         return std::get<1>(tupl);
                     }
                 }

@@ -1,17 +1,3 @@
-/*
- * Copyright (c) 2015 Carnegie Mellon University and The Trustees of Indiana
- * University.
- * All Rights Reserved.
- *
- * THIS SOFTWARE IS PROVIDED "AS IS," WITH NO WARRANTIES WHATSOEVER. CARNEGIE
- * MELLON UNIVERSITY AND THE TRUSTEES OF INDIANA UNIVERSITY EXPRESSLY DISCLAIM
- * TO THE FULLEST EXTENT PERMITTED BY LAW ALL EXPRESS, IMPLIED, AND STATUTORY
- * WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT OF PROPRIETARY RIGHTS.
- *
- * This Program is distributed under a BSD license.  Please see LICENSE file or
- * permission@sei.cmu.edu for more information.  DM-0002659
- */
 
 #ifndef GB_ALGEBRA_HPP
 #define GB_ALGEBRA_HPP
@@ -275,11 +261,13 @@ typedef GraphBLAS::LogicalXor<bool>   GrB_LXOR;
 // Monoids
 //****************************************************************************
 
-#define GEN_GRAPHBLAS_MONOID(M_NAME, BINARYOP, IDENTITY)               \
+#define GEN_GRAPHBLAS_MONOID(M_NAME, BINARYOP, IDENTITY)        \
     template <typename ScalarT>                                 \
     struct M_NAME                                               \
     {                                                           \
     public:                                                     \
+        typedef ScalarT lhs_type;                               \
+        typedef ScalarT rhs_type;                               \
         typedef ScalarT ScalarType;                             \
         typedef ScalarT result_type;                            \
                                                                 \
@@ -314,15 +302,17 @@ namespace GraphBLAS
 /**
  * The macro for building semi-ring objects
  *
- * @param[in]  SRNAME  The class name
- * @param[in]  SRADD   The addition monoid
- * @param[in]  SRMULT  The multiplication binary function
+ * @param[in]  SRNAME        The class name
+ * @param[in]  ADD_MONOID    The addition monoid
+ * @param[in]  MULT_BINARYOP The multiplication binary function
  */
 #define GEN_GRAPHBLAS_SEMIRING(SRNAME, ADD_MONOID, MULT_BINARYOP)       \
     template <typename D1, typename D2=D1, typename D3=D1>              \
     class SRNAME                                                        \
     {                                                                   \
     public:                                                             \
+        typedef D1 lhs_type;                                            \
+        typedef D2 rhs_type;                                            \
         typedef D3 ScalarType;                                          \
         typedef D3 result_type;                                         \
                                                                         \
@@ -344,8 +334,8 @@ namespace GraphBLAS
     GEN_GRAPHBLAS_SEMIRING(LogicalSemiring, LogicalOrMonoid, LogicalAnd)
 
     /// @note the Plus operator would need to be "infinity aware" if the caller
-    /// were to pass "infinity" sentinel as one of the arguments. But no GraphBLAS
-    /// operations should do that.
+    /// were to pass "infinity" sentinel as one of the arguments. But no
+    /// GraphBLAS operations 'should' do that.
     GEN_GRAPHBLAS_SEMIRING(MinPlusSemiring, MinMonoid, Plus)
 
     GEN_GRAPHBLAS_SEMIRING(MaxTimesSemiring, MaxMonoid, Times)

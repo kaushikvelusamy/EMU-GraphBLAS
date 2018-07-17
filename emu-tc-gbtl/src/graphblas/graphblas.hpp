@@ -8,5 +8,5 @@
 #include <graphblas/Matrix.hpp>
 #define GB_INCLUDE_BACKEND_ALL 1
 #include <backend_include.hpp>
-
+#include <graphblas/TransposeView.hpp>
 #endif

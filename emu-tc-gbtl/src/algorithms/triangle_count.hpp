@@ -9,9 +9,9 @@
 namespace algorithms
 
 {
+   //************************************************************************
     template<typename MatrixT>
-    typename MatrixT::ScalarType triangle_count_masked_v2(MatrixT const &L,
-                                                          MatrixT const &U)
+    typename MatrixT::ScalarType triangle_count_masked(MatrixT const &L)
     {
         using T = typename MatrixT::ScalarType;
         GraphBLAS::IndexType rows(L.nrows());
@@ -21,7 +21,7 @@ namespace algorithms
         GraphBLAS::mxm(B,
                        L, GraphBLAS::NoAccumulate(),
                        GraphBLAS::ArithmeticSemiring<T>(),
-                       L, U);
+                       L, GraphBLAS::transpose(L));
 
         T sum = 0;
         GraphBLAS::reduce(sum,
@@ -30,7 +30,63 @@ namespace algorithms
                           B);
         return sum;
     }
+/*
+   ************************************************************************
+    template<typename LMatrixT, typename MatrixT>
+    typename MatrixT::ScalarType triangle_count_newGBTL(LMatrixT const &L,
+                                                        MatrixT  const &U)
+    {
+        auto start = std::chrono::steady_clock::now();
 
-  } // algorithms
+        using T = typename MatrixT::ScalarType;
+
+	GraphBLAS::IndexType rows(L.nrows());
+        GraphBLAS::IndexType cols(L.ncols());
+
+        MatrixT B(rows, cols);
+        GraphBLAS::mxm(B, GraphBLAS::NoMask(), GraphBLAS::NoAccumulate(),
+                       GraphBLAS::ArithmeticSemiring<T>(),
+                       L,
+                       U);  /// @todo can't use transpose(L) here as LMatrix may
+                            /// already be a TransposeView (nesting not supported)
+
+        auto finish = std::chrono::steady_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>
+            (finish - start);
+        start = finish;
+        //std::cout << "mxm elapsed time: " << duration.count() << " msec." << std::endl;
+
+	
+        T sum = 0;
+        MatrixT C(rows, cols);
+        GraphBLAS::eWiseMult(C, GraphBLAS::NoMask(), GraphBLAS::NoAccumulate(),
+                             GraphBLAS::Times<T>(),
+                             L, B, true);
+
+        GraphBLAS::reduce(sum, GraphBLAS::NoAccumulate(),
+                          GraphBLAS::PlusMonoid<T>(), C);
+        finish = std::chrono::steady_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>
+            (finish - start);
+        start = finish;
+        //std::cout << "count1 elapsed time: " << duration.count() << " msec." << std::endl;
+
+        // for undirected graph you can stop here and return 'sum'
+
+        GraphBLAS::eWiseMult(C, GraphBLAS::NoMask(), GraphBLAS::NoAccumulate(),
+                             GraphBLAS::Times<T>(),
+                             U, B, true);
+
+        GraphBLAS::reduce(sum, GraphBLAS::Plus<T>(),
+                          GraphBLAS::PlusMonoid<T>(), C);
+        finish = std::chrono::steady_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>
+            (finish - start);
+        //std::cout << "count2 elapsed time: " << duration.count() << " msec." << std::endl;
+
+        return sum / static_cast<T>(2);
+    }
+  */
+} // algorithms
 
 #endif // ALGORITHMS_TRIANGLE_COUNT_HPP

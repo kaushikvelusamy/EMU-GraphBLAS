@@ -1,7 +1,7 @@
 # EMU-GraphBLAS
 The EMU Backend for the graphBLAS template Library
 
-# GraphBLAS Template Library (GBTL)
+## GraphBLAS Template Library (GBTL)
 
 This is Version 2.0 of the C++ implementation that is mathematically
 equivalent to the GraphBLAS C API.  Unlike the first version (which

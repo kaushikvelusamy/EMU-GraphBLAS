@@ -11,3 +11,10 @@
 #include <graphblas/platforms/emu_backend/operations.hpp>
 #undef GB_INCLUDE_BACKEND_OPERATIONS
 #endif
+
+
+#if(GB_INCLUDE_BACKEND_TRANSPOSE_VIEW)
+#include <graphblas/platforms/emu_backend/TransposeView.hpp>
+#undef GB_INCLUDE_BACKEND_TRANSPOSE_VIEW
+#endif
+

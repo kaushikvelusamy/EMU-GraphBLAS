@@ -1,7 +1,9 @@
 #pragma once
 #include "matrix_tags.hpp"
-#include <backend_include.hpp>
+
 #define GB_INCLUDE_BACKEND_MATRIX 1
+
+#include <backend_include.hpp>
 
 //this file contains the variadic template parameters unpacking utility.
 
@@ -83,6 +85,7 @@ namespace GraphBLAS
                       typename detail::substitute<Directedness, InputTag >::type > ;
             };
         };
+
 
     }//end detail
 }

@@ -15,15 +15,18 @@ namespace GraphBLAS
 
     template<typename ScalarT, typename... TagsT>
     class Matrix;
+
+   template<typename MatrixT>
+    class TransposeView;
+
  
     template<typename ScalarT, typename... TagsT>
     class Matrix
     {
     public:
+        typedef matrix_tag  tag_type;
 
-        typedef     matrix_tag          tag_type;
-
-        typedef ScalarT ScalarType;
+        typedef ScalarT     ScalarType;
         typedef typename detail::matrix_generator::result<
             ScalarT,
             detail::SparsenessCategoryTag,
@@ -155,7 +158,7 @@ namespace GraphBLAS
          */
         template<typename ValueT,
                  typename BinaryOpT = GraphBLAS::Second<ScalarType> >
-        inline void build(IndexArrayType       const &row_indices,
+        inline Info build(IndexArrayType       const &row_indices,
                           IndexArrayType       const &col_indices,
                           std::vector<ValueT>  const &values,
                           BinaryOpT                   dup = BinaryOpT())
@@ -166,8 +169,8 @@ namespace GraphBLAS
                 std::cerr << "throw DimensionException(\"Matrix::build\")\n";
             }
 
-            m_mat.build(row_indices.begin(), col_indices.begin(),
-                        values.begin(), values.size(), dup);
+            return m_mat.build(row_indices.begin(), col_indices.begin(),
+                               values.begin(), values.size(), dup);
         }
 
         void clear() { m_mat.clear(); }
@@ -223,7 +226,7 @@ namespace GraphBLAS
                  typename SemiringT,
                  typename AMatrixT,
                  typename BMatrixT>
-        friend inline void mxm(CMatrixT         &C,
+        friend inline Info mxm(CMatrixT         &C,
                                MaskT      const &Mask,
                                AccumT            accum,
                                SemiringT         op,
@@ -237,7 +240,7 @@ namespace GraphBLAS
                  typename AccumT,
                  typename BinaryOpT,  // monoid or binary op only
                  typename AMatrixT>
-        friend inline void reduce(WVectorT        &u,
+        friend inline Info reduce(WVectorT        &u,
                                   MaskT     const &mask,
                                   AccumT           accum,
                                   BinaryOpT        op,
@@ -250,17 +253,39 @@ namespace GraphBLAS
                  typename MonoidT, // monoid only
                  typename AScalarT,
                  typename... ATagsT>
-        friend inline void reduce(
+        friend inline Info reduce(
             ValueT                                       &dst,
             AccumT                                        accum,
             MonoidT                                       op,
             GraphBLAS::Matrix<AScalarT, ATagsT...> const &A);
+
+        //--------------------------------------------------------------------
+
+        // 4.3.10
+        template<typename CMatrixT,
+                 typename MaskT,
+                 typename AccumT,
+                 typename AMatrixT>
+        friend inline Info transpose(CMatrixT       &C,
+                                     MaskT    const &Mask,
+                                     AccumT          accum,
+                                     AMatrixT const &A,
+                                     bool            replace_flag);
+
+        //--------------------------------------------------------------------
+
+        template<typename MatrixT>
+        friend inline GraphBLAS::TransposeView<MatrixT> transpose(MatrixT const &A);
+
+
 
 
     private:
         BackendType m_mat;
     };
 
+    //**************************************************************************
+    // GrB_NULL mask: should be GrB_FULL
     class NoMask
     {
     public:

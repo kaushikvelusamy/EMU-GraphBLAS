@@ -9,5 +9,21 @@
 #include <graphblas/algebra.hpp>
 #include <graphblas/platforms/emu_backend/sparse_mxm.hpp>
 #include <graphblas/platforms/emu_backend/sparse_reduce.hpp>
+#include <graphblas/platforms/emu_backend/sparse_transpose.hpp>
 
-#endif
+
+namespace GraphBLAS
+{
+    namespace backend
+    {
+
+        template<typename MatrixT>
+        inline TransposeView<MatrixT> transpose(MatrixT const &A)
+        {
+            return TransposeView<MatrixT>(A);
+        }
+
+    } // backend
+} // GraphBLAS
+
+#endif // GB_SEQUENTIAL_OPERATIONS_HPP
