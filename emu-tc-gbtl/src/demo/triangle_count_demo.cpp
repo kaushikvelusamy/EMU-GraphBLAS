@@ -18,23 +18,26 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
- // Read the edgelist and create the tuple arrays
-    GraphBLAS::IndexArrayType iL, iU, iA;
-    GraphBLAS::IndexArrayType jL, jU, jA;
-    int64_t num_rows = 0;
-    int64_t max_id = 0;
-    uint64_t src, dst;
+	// Read the edgelist and create the tuple arrays
+	GraphBLAS::IndexArrayType iL, iU, iA;
+	GraphBLAS::IndexArrayType jL, jU, jA;
+	int64_t num_rows = 0;
+	int64_t max_id = 0;
+	uint64_t src, dst;
 
-    FILE *infile = fopen(argv[1], "r");
-    if (!infile)
-    {
-        fprintf(stderr, "Unable to open file: %s\n", argv[1]);
-        exit(1);
-    }
+	GraphBLAS::IndexArrayType :: iterator i;
 
-	while (!feof(infile))
+
+
+	FILE *infile = fopen(argv[1], "r");
+	if (!infile)
 	{
-		fscanf(infile, "%ld %ld", &src, &dst);
+		fprintf(stderr, "Unable to open file: %s\n", argv[1]);
+		exit(1);
+	}
+
+	while ( fscanf(infile, "%ld %ld", &src, &dst) == 2)
+	{
 		printf("Read: %ld, %ld\n", src, dst);
 		if (src > max_id) max_id = src;
 		if (dst > max_id) max_id = dst;
@@ -63,6 +66,33 @@ int main(int argc, char **argv)
 	std::cout << "Read " << num_rows << " rows." << std::endl;
 	std::cout << "#Nodes = " << (max_id + 1) << std::endl;
 
+	for (i = iA.begin(); i != iA.end(); ++i)
+		std::cout << *i << '\t';
+	std::cout<<std::endl;
+
+	for (i = jA.begin(); i != jA.end(); ++i)
+		std::cout << *i << '\t';
+	std::cout<<std::endl;
+	for (i = iU.begin(); i != iU.end(); ++i)
+		std::cout << *i << '\t';
+
+	std::cout<<std::endl;
+	for (i = jU.begin(); i != jU.end(); ++i)
+		std::cout << *i << '\t';
+
+
+	std::cout<<std::endl;
+	for (i = iL.begin(); i != iL.end(); ++i)
+		std::cout << *i << '\t';
+
+	std::cout<<std::endl;
+	for (i = jL.begin(); i != jL.end(); ++i)
+		std::cout << *i << '\t';
+
+
+	std::cout<<std::endl;
+
+
 	GraphBLAS::IndexType NUM_NODES(max_id + 1);
 	typedef int32_t T;
 	std::vector<T> v(iA.size(), 1);
@@ -89,9 +119,9 @@ int main(int argc, char **argv)
 		(std::chrono::steady_clock::now() - start);
 
 	/* std::cout << "# triangles = " << count << std::endl;
-	std::cout << "Elapsed time: " << duration.count() << " msec." << std::endl;
-	*/
-	
+	   std::cout << "Elapsed time: " << duration.count() << " msec." << std::endl;
+	 */
+
 	start = std::chrono::steady_clock::now();
 
 	count = algorithms::triangle_count_masked(L);

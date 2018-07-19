@@ -303,7 +303,6 @@ namespace GraphBLAS
                                   BinaryOpT        op,
                                   AMatrixT  const &A,
                                   bool             replace_flag);
-
         // 4.3.10: transpose
         template<typename CMatrixT,
                  typename MaskT,
