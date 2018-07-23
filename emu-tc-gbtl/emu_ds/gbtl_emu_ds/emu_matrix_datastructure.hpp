@@ -50,19 +50,7 @@ class emu_matrix {
 };
 
 
-	template <class ScalarType>
-IndexType emu_matrix<ScalarType>::getRowDim()
-{
-	return m_num_rows;  
-}
-
-	template <class ScalarType>
-IndexType emu_matrix<ScalarType>::getColDim()
-{
-	return m_num_cols;  
-}
-
-template<>
+template<class ScalarType>
 void emu_matrix<ScalarType>::setElement(IndexType irow, IndexType icol, ScalarType val, IndexType i,IndexType j)
 {
 
@@ -83,7 +71,8 @@ void emu_matrix<ScalarType>::setElement(IndexType irow, IndexType icol, ScalarTy
 		{
 			if (std::get<0>(*it) == icol)
 			{
-				std::get<1>(*it) = std::merge(std::get<1>(*it), val);
+				std::get<1>(*it) = std::get<1>(*it);
+			//	std::get<1>(*it) = std::merge(std::get<1>(*it), val);
 				return;
 			}
 			else if (std::get<0>(*it) > icol)
@@ -101,7 +90,7 @@ void emu_matrix<ScalarType>::setElement(IndexType irow, IndexType icol, ScalarTy
 
 
 
-template<>
+template<class ScalarType>
 void emu_matrix<ScalarType>::row_block_dense_build(IndexArrayType :: iterator  i_it,
                         IndexArrayType :: iterator j_it,
                         IndexArrayType :: iterator v_it,
@@ -155,61 +144,4 @@ void emu_matrix<ScalarType>::row_block_dense_print()
 	}
 }
 
-/*	
-	typedef std::vector<std::tuple<IndexType, ScalarType>> const & RowType;
 
-	IndexType num_rows = nrows();
-	IndexType num_cols = ncols();
-
-	os << "(" << num_rows << "x" << num_cols << ")" << std::endl;
-
-	for (IndexType row_idx = 0; row_idx < num_rows; ++row_idx)
-	{
-		// We like to start with a little whitespace indent
-		os << ((row_idx == 0) ? "  [[" : "   [");
-
-		RowType const &row(getRow(row_idx));
-		IndexType curr_idx = 0;
-
-		if (row.empty())
-		{
-			while (curr_idx < num_cols)
-			{
-				os << ((curr_idx == 0) ? " " : ",  " );
-				++curr_idx;
-			}
-		}
-		else
-		{
-			// Now walk the columns.  A sparse iter would be handy here...
-			IndexType col_idx;
-			ScalarType cell_val;
-
-			auto row_it = row.begin();
-			while (row_it != row.end())
-			{
-				std::tie(col_idx, cell_val) = *row_it;
-				while (curr_idx < col_idx)
-				{
-					os << ((curr_idx == 0) ? " " : ",  " );
-					++curr_idx;
-				}
-
-				if (curr_idx != 0)
-					os << ", ";
-				os << cell_val;
-
-				++row_it;
-				++curr_idx;
-			}
-
-			// Fill in the rest to the end
-			while (curr_idx < num_cols)
-			{
-				os << ",  ";
-				++curr_idx;
-			}
-		}
-		os << ((row_idx == num_rows - 1 ) ? "]]" : "]\n");
-	}
-*/

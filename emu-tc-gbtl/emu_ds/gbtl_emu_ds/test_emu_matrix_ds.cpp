@@ -131,7 +131,6 @@ int main(int argc, char **argv)
         IndexArrayType v(iA.size(), 1);
 	
 	emu_matrix<ScalarType> L(NUM_NODES, NUM_NODES);
-	std::cout<<"\t\t RowDim= "<<L.getRowDim()<<"\t ColDim ="<<L.getColDim()<<"\n";
 
 	
 	if(nnodes1 > NUM_NODES) 
@@ -140,7 +139,6 @@ int main(int argc, char **argv)
 	std::cout<<"Updated Nodelets:"<<'\t'<<nnodes1<<std::endl;
 
 	L.row_block_dense_build(iL.begin(),jL.begin(), v.begin(), iL.size(),nnodes1);
-	L.row_block_dense_size();	
 	L.row_block_dense_print();
 
 	//#ifndef SIM0
