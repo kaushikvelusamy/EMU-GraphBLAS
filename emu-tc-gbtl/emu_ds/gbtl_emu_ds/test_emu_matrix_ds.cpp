@@ -50,10 +50,6 @@ int main(int argc, char **argv)
 	std::cout<<"The ClockRate Entered is"<<clockrate<<std::endl;
 	std::cout<<"The printFlag Entered is"<<printflag<<std::endl;
 
-	typedef uint64_t IndexType;
-        typedef uint64_t ScalarType;
-
-	typedef std::vector<IndexType> IndexArrayType;
 	IndexArrayType iL, iU, iA;
 	IndexArrayType jL, jU, jA;
 
@@ -98,8 +94,8 @@ int main(int argc, char **argv)
 
 	IndexArrayType :: iterator i;
 	fclose(infile);
-	std::cout << "Read " << num_rows << " rows." << std::endl;
-	std::cout << "#Nodes = " << (max_id + 1) << std::endl;
+	std::cout << "Read Input File Lines" << num_rows << " rows." << std::endl;
+	std::cout << "#Nodes In The Input Graph= " << (max_id + 1) << std::endl;
 
 	std::cout<<"iA Vector"<<std::endl;
 	for (i = iA.begin(); i != iA.end(); ++i)
@@ -133,14 +129,19 @@ int main(int argc, char **argv)
 
 	IndexType NUM_NODES(max_id + 1);
         IndexArrayType v(iA.size(), 1);
-
+	
 	emu_matrix<ScalarType> L(NUM_NODES, NUM_NODES);
 	std::cout<<"\t\t RowDim= "<<L.getRowDim()<<"\t ColDim ="<<L.getColDim()<<"\n";
-	if(nnodes1 < NUM_NODES) nnodes1=NUM_NODES;
 
-//	L.row_block_dense_build(iL.begin(),jL.begin(), v.begin(), iL.size(),nnodes1);
 	
-//	L.row_block_dense_print();
+	if(nnodes1 > NUM_NODES) 
+		nnodes1=NUM_NODES;
+	
+	std::cout<<"Updated Nodelets:"<<'\t'<<nnodes1<<std::endl;
+
+	L.row_block_dense_build(iL.begin(),jL.begin(), v.begin(), iL.size(),nnodes1);
+	L.row_block_dense_size();	
+	L.row_block_dense_print();
 
 	//#ifndef SIM0
 	//starttiming();
@@ -158,11 +159,11 @@ int main(int argc, char **argv)
 	unsigned long totaltime = endtime - starttime;
 	double ms = ((double) totaltime / clockrate) / 1000.0;
 	std::cout<<std::endl;
-	cout<<"Updated Nodelets:"<<'\t'<<nnodes1<<std::endl;
-	cout<<"Nthreads:"<<'\t'<<nthreads<<std::endl;
-	cout<<"ClockRate:"<<'\t'<<clockrate<<std::endl;
-	cout<<"TotalClockCycles:"<<'\t'<<totaltime<<std::endl;
-	cout<<"TotalTimeTaken:"<<'\t'<<ms<<std::endl;
+	std::cout<<"Updated Nodelets:"<<'\t'<<nnodes1<<std::endl;
+	std::cout<<"Nthreads:"<<'\t'<<nthreads<<std::endl;
+	std::cout<<"ClockRate:"<<'\t'<<clockrate<<std::endl;
+	std::cout<<"TotalClockCycles:"<<'\t'<<totaltime<<std::endl;
+	std::cout<<"TotalTimeTaken:"<<'\t'<<ms<<std::endl;
 
 	return 0;
 
