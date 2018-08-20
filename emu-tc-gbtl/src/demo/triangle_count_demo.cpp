@@ -66,30 +66,39 @@ int main(int argc, char **argv)
 	std::cout << "Read " << num_rows << " rows." << std::endl;
 	std::cout << "#Nodes = " << (max_id + 1) << std::endl;
 
+	std::cout <<"iA Vector";
 	for (i = iA.begin(); i != iA.end(); ++i)
-		std::cout << *i << '\t';
+		std::cout <<*i << '\t';
 	std::cout<<std::endl;
 
+
+	std::cout <<"jA Vector";
 	for (i = jA.begin(); i != jA.end(); ++i)
 		std::cout << *i << '\t';
 	std::cout<<std::endl;
+
+
+	std::cout <<"iU Vector";
 	for (i = iU.begin(); i != iU.end(); ++i)
-		std::cout << *i << '\t';
-
+		std::cout <<*i << '\t';
 	std::cout<<std::endl;
+
+
+	std::cout <<"jU Vector";
 	for (i = jU.begin(); i != jU.end(); ++i)
-		std::cout << *i << '\t';
-
-
+		std::cout <<*i << '\t';
 	std::cout<<std::endl;
+
+
+	std::cout <<"iL Vector";
 	for (i = iL.begin(); i != iL.end(); ++i)
-		std::cout << *i << '\t';
-
+		std::cout <<*i << '\t';
 	std::cout<<std::endl;
+
+
+	std::cout <<"jL Vector";
 	for (i = jL.begin(); i != jL.end(); ++i)
-		std::cout << *i << '\t';
-
-
+		std::cout <<*i << '\t';
 	std::cout<<std::endl;
 
 
@@ -104,9 +113,9 @@ int main(int argc, char **argv)
 	MatType L(NUM_NODES, NUM_NODES);
 	MatType U(NUM_NODES, NUM_NODES);
 
-	A.build(iA.begin(), jA.begin(), v.begin(), iA.size());
+	//	A.build(iA.begin(), jA.begin(), v.begin(), iA.size());
 	L.build(iL.begin(), jL.begin(), v.begin(), iL.size());
-	U.build(iU.begin(), jU.begin(), v.begin(), iU.size());
+	//	U.build(iU.begin(), jU.begin(), v.begin(), iU.size());
 
 	std::cout << "Running algorithm(s)..." << std::endl;
 	T count(0);

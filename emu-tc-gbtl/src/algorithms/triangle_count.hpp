@@ -18,6 +18,7 @@ namespace algorithms
         GraphBLAS::IndexType cols(L.ncols());
 
         MatrixT B(rows, cols);
+		 std::cout << "Debug before reduce function"<< std::endl;
         GraphBLAS::mxm(B,
                        L, GraphBLAS::NoAccumulate(),
                        GraphBLAS::ArithmeticSemiring<T>(),
