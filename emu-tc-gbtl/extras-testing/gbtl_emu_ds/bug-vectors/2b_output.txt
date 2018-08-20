@@ -1,0 +1,29 @@
+ emu-cc 2a_basic2dmalwithtuple.cpp 
+In file included from 2a_basic2dmalwithtuple.cpp:5:
+/usr/local/emu-18.04.1/bin/../include/libcxx/vector:14:9: warning: '_LIBCPP_NO_EXCEPTIONS' macro redefined
+#define _LIBCPP_NO_EXCEPTIONS 
+        ^
+/usr/local/emu-18.04.1/bin/../include/libcxx/memory:677:9: note: previous definition is here
+#define _LIBCPP_NO_EXCEPTIONS 1
+        ^
+1 warning generated.
+> emusim.x a.out.mwx 
+
+        SystemC 2.3.1-Accellera --- Apr 13 2016 09:49:12
+        Copyright (c) 1996-2014 by all Contributors,
+        ALL RIGHTS RESERVED
+Start untimed simulation with local date and time= Wed Jul 25 19:31:21 2018
+
+4
+Hello
+Nodele0		1:1	1:1	1:1	1:1
+Nodele1		1:1	1:1	1:1	1:1
+Nodele2		1:1	1:1	1:1	1:1
+Nodele3		1:1	1:1	1:1	1:1
+Nodele4		1:1	1:1	1:1	1:1
+Nodele5		1:1	1:1	1:1	1:1
+Nodele6		1:1	1:1	1:1	1:1
+Nodele7		1:1	1:1	1:1	1:1
+0End untimed simulation with local date and time= Wed Jul 25 19:31:21 2018
+
+

@@ -134,7 +134,7 @@ int main(int argc, char **argv)
 
 	
 	if(nnodes1 > NUM_NODES) 
-		nnodes1=NUM_NODES;
+		nnodes1=3;
 	
 	std::cout<<"Updated Nodelets:"<<'\t'<<nnodes1<<std::endl;
 

@@ -1,0 +1,65 @@
+ emu-cc 3_basic2dmalwithvector.cpp 
+In file included from 3_basic2dmalwithvector.cpp:3:
+/usr/local/emu-18.04.1/bin/../include/libcxx/vector:14:9: warning: '_LIBCPP_NO_EXCEPTIONS' macro redefined
+#define _LIBCPP_NO_EXCEPTIONS 
+        ^
+/usr/local/emu-18.04.1/bin/../include/libcxx/memory:677:9: note: previous definition is here
+#define _LIBCPP_NO_EXCEPTIONS 1
+        ^
+1 warning generated.
+> emusim.x a.out.mwx 
+
+        SystemC 2.3.1-Accellera --- Apr 13 2016 09:49:12
+        Copyright (c) 1996-2014 by all Contributors,
+        ALL RIGHTS RESERVED
+Start untimed simulation with local date and time= Wed Jul 25 19:26:31 2018
+
+UNTIMED SIMULATION on NLET[0] TID[0] generated exception
+ThreadletID=0
+ThreadletState=Memory
+ThreadletException=1=Address
+Current Instruction:
+801eaa79	WRD:	iToken=133	iLength=2	nibbles=980000
+Threadlet TCB Data:
+TCB.(TPC)=(0x801eaa79) (32 bits each)
+TCB.(D,D2)=(1,1) (one bit each)
+TCB.(A,A2)=(1,1) (one bit each)
+TCB.(TS,TSDATA)=(0,0x0) (two bits, four bits)
+TCB.AID=0x1 (8 bits)
+TCB.MaxDepth=0xff (8 bits)
+TCB.Priority=0x1 (8 bits)
+TCB.(NaN,U,V,CB,N,Z)=(0, 0, 0, 0, 0, 0)
+TCB.M=0 (one bit)
+TCB.DB=0 (one bit)
+
+Threadlet Data Registers
+A: 0x7fffe5b1=2147476913
+A2: 0x0=0
+Format: signed decimal, unsigned decimal, hex
+D: 72057594039059328,  72057594039059328, 0x100000000114380
+D2: 36028797020039696, 36028797020039696, 0x80000000106a10
+E[0] (Live): 72057594039056928, 72057594039056928, 0x100000000113a20
+E[1] (Live): 2148486493, 2148486493, 0x800f4d5d
+E[2] (Live): 72057594039059328, 72057594039059328, 0x100000000114380
+E[3] (Live): 72057594039059328, 72057594039059328, 0x100000000114380
+E[4] (Live): 2147476897, 2147476897, 0x7fffe5a1
+E[5] (Live): 72057594039059320, 72057594039059320, 0x100000000114378
+E[6] (Live): 72057594039059320, 72057594039059320, 0x100000000114378
+E[7] (Live): 8, 8, 0x8
+E[8] (Inactive): 0, 0, 0x0
+E[9] (Live): 108086391057975640, 108086391057975640, 0x180000000108958
+E[10] (Live): 108086391057987985, 108086391057987985, 0x18000000010b991
+E[11] (Live): 72057594039056928, 72057594039056928, 0x100000000113a20
+E[12] (Live): 72057596186536272, 72057596186536272, 0x100000080112950
+E[13] (Live): 72057596186536264, 72057596186536264, 0x100000080112948
+E[14] (Live): 2147497627, 2147497627, 0x8000369b
+E[15] (Live): -4, 18446744073709551612, 0xfffffffffffffffc
+
+Other Useful Data
+Fence Counter=0
+Source NletID=0
+Dest NletID=0
+End untimed simulation with local date and time= Wed Jul 25 19:26:31 2018
+
+GENERATED EXCEPTION
+> 

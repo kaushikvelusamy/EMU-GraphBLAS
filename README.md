@@ -13,7 +13,8 @@ over performance.
 
 ## Compile and Run
 
-Check the quick-compile.sh script in the src/demo/ directory
+Check the emu-compile.sh script in the /emu-tc-gbtl/src/demo/ directory
+emusim.x ./a.out.mwx /emu-tc-gbtl/src/demo/dataset/tc-small-data.tsv
 
 ## Installation
 
@@ -24,6 +25,10 @@ location in your include path.
 ## Project Goals
 
 * Complete, mathematically equivalent implementation of the GraphBLAS C API
-specification in C++ (specification http://graphblas.org).
+specification in C++ (specification http://graphblas.org) for EMU Migratory Thread Parallel Computer.
 * Graph algorithm library supporting commonly used graph algorithms.
 * Graph input/output library (TBD).
+
+EMU-GBTL GOALS:
+* Distribute the Matrix Across the Nodelets
+* Use Atomic and Remote Operations

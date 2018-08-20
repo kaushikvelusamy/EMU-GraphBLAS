@@ -1,0 +1,63 @@
+> emu-cc 1b-tuple_with_array_to_storenodeid.cpp 
+> emusim.x --core_clk_mhz 150 --gcs_per_nodelet 1  a.out.mwx 
+
+        SystemC 2.3.1-Accellera --- Apr 13 2016 09:49:12
+        Copyright (c) 1996-2014 by all Contributors,
+        ALL RIGHTS RESERVED
+Start untimed simulation with local date and time= Thu Jul 26 12:23:47 2018
+
+Printing the starting nodeID array
+0	0	
+0	0	
+0	0	
+0	0	
+0	0	
+0	0	
+0	0	
+0	0	
+Printing the ending nodeID array
+0	0	
+1	1	
+2	2	
+3	3	
+4	4	
+5	5	
+6	6	
+7	7	
+Printing the elements from each nodelet
+Nodele0
+	1:1
+	1:1
+
+Nodele1
+	1:1
+	1:1
+
+Nodele2
+	1:1
+	1:1
+
+Nodele3
+	1:1
+	1:1
+
+Nodele4
+	1:1
+	1:1
+
+Nodele5
+	1:1
+	1:1
+
+Nodele6
+	1:1
+	1:1
+
+Nodele7
+	1:1
+	1:1
+
+End untimed simulation with local date and time= Thu Jul 26 12:23:48 2018
+
+> 
+
