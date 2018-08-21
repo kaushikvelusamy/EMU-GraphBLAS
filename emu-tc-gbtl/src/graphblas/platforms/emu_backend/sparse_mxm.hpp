@@ -55,6 +55,7 @@ namespace GraphBLAS
 
             // =================================================================
             // Do the basic dot-product work with the semi-ring.
+            std::cout << "DEBUG: BEGIN compute T" << std::endl;
             LilSparseMatrix<D3ScalarType> T(nrow_A, ncol_B);
 
             // Build this completely based on the semiring
@@ -90,21 +91,27 @@ namespace GraphBLAS
                 }
             }
 
+            T.printInfo(std::cout, "END compute T");
 
             // =================================================================
             // Accumulate into Z
+            std::cout << "DEBUG: BEGIN compute Z" << std::endl;
             typedef typename std::conditional<
                 std::is_same<AccumT, NoAccumulate>::value,
                 D3ScalarType,
                 typename AccumT::result_type>::type ZScalarType;
             LilSparseMatrix<ZScalarType> Z(nrow_C, ncol_C);
 
+            T.printInfo(std::cout, "(again) T");
             ewise_or_opt_accum(Z, C, T, accum);
 
+            Z.printInfo(std::cout, "END compute Z");
 
             // =================================================================
             // Copy Z into the final output considering mask and replace
+            std::cout << "DEBUG: BEGIN compute C" << std::endl;
             write_with_opt_mask(C, Z, M, replace_flag);
+            C.printInfo(std::cout, "END compute C");
             return SUCCESS;
         } // mxm
     } // backend

@@ -27,11 +27,16 @@ namespace GraphBLAS
             typedef std::vector<std::tuple<IndexType, DstScalarType> > DstRowType;
 
             // Copying removes the contents of the other matrix so clear it first.
+            std::cout << "DEBUG: sparse_copy clear dst" << std::endl;
             dstMatrix.clear();
+            dstMatrix.printInfo(std::cout, "dstMatrix");
+
+            srcMatrix.printInfo(std::cout, "srcMatrix");
 
             IndexType nrows(dstMatrix.nrows());
             for (IndexType row_idx = 0; row_idx < nrows; ++row_idx)
             {
+                std::cout << "DEBUG: sparse_copy copy row " << row_idx << std::endl;
                 SrcRowType srcRow = srcMatrix.getRow(row_idx);
                 DstRowType dstRow;
 
@@ -346,6 +351,8 @@ namespace GraphBLAS
                                 TMatrixT const              &T,
                                 GraphBLAS::NoAccumulate )
         {
+            T.printInfo(std::cout, "ewise_or_opt_accum, T (src)");
+            Z.printInfo(std::cout, "ewise_or_opt_accum, Z (dst)");
             sparse_copy(Z, T);
         }
 

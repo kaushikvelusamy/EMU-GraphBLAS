@@ -17,13 +17,16 @@ namespace algorithms
         GraphBLAS::IndexType rows(L.nrows());
         GraphBLAS::IndexType cols(L.ncols());
 
+        std::cout << "DEBUG: allocating temporary matrix." << std::endl;
         MatrixT B(rows, cols);
-		 std::cout << "Debug before reduce function"<< std::endl;
+
+        std::cout << "DEBUG: before mxm function"<< std::endl;
         GraphBLAS::mxm(B,
                        L, GraphBLAS::NoAccumulate(),
                        GraphBLAS::ArithmeticSemiring<T>(),
                        L, GraphBLAS::transpose(L));
 
+        std::cout << "DEBUG: before reduce function"<< std::endl;
         T sum = 0;
         GraphBLAS::reduce(sum,
                           GraphBLAS::NoAccumulate(),
@@ -57,7 +60,7 @@ namespace algorithms
         start = finish;
         //std::cout << "mxm elapsed time: " << duration.count() << " msec." << std::endl;
 
-	
+
         T sum = 0;
         MatrixT C(rows, cols);
         GraphBLAS::eWiseMult(C, GraphBLAS::NoMask(), GraphBLAS::NoAccumulate(),
