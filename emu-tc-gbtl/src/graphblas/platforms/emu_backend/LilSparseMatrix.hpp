@@ -62,12 +62,13 @@ namespace GraphBLAS
                                                    m_row_blocks_repl[nodelet_id]);
                     pSparseRow dummyPtr = new(lvar[row_id]) SparseRow();
                 }
-
+                std::cout << "LilSparseMatrix ctor: " << this << std::endl;
             }
 
             // Destructor
             ~LilSparseMatrix()
             {
+                std::cout << "LilSparseMatrix dtor: " << this << std::endl;
                 // Clean up nodelet data
                 for (IndexType row_index = 0; row_index < m_num_rows; ++row_index)
                 {
@@ -665,12 +666,12 @@ namespace GraphBLAS
 
             size_t nodeID(IndexType row_index) const
             {
-                return row_index/m_num_nodelets;
+                return row_index % m_num_nodelets;
             }
 
             size_t nodeRowID(IndexType row_index) const
             {
-                return row_index % m_num_nodelets;
+                return row_index / m_num_nodelets;
             }
 
             typedef std::vector<std::tuple<IndexType, ScalarT>>* pSparseRow;
