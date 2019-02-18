@@ -1,0 +1,185 @@
+at Dec  8 00:33:01 2018
+
+> emusim.x run_emu_tc.mwx dataset/8x8dataset/
+dataset_8x8.tsv  matrix_8x8.txt   picture_8x8.jpg  
+> emusim.x run_emu_tc.mwx dataset/8x8dataset/dataset_8x8.tsv 
+
+        SystemC 2.3.1-Accellera --- Aug 13 2018 11:31:10
+        Copyright (c) 1996-2014 by all Contributors,
+        ALL RIGHTS RESERVED
+Start untimed simulation with local date and time= Sat Dec  8 00:33:26 2018
+
+Read 0: 0, 1
+Read 1: 0, 2
+Read 2: 0, 7
+Read 3: 0, 3
+Read 4: 1, 0
+Read 5: 1, 2
+Read 6: 2, 1
+Read 7: 2, 0
+Read 8: 2, 7
+Read 9: 3, 0
+Read 10: 3, 4
+Read 11: 4, 3
+Read 12: 4, 5
+Read 13: 5, 4
+Read 14: 5, 6
+Read 15: 6, 5
+Read 16: 6, 7
+Read 17: 7, 6
+Read 18: 7, 0
+Read 19: 7, 2
+Read 20 rows.
+#Nodes = 8
+Constructing my CSR Matrix 
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+1 2 7 3 0 2 1 0 7 0 4 3 5 4 6 5 7 6 0 2 
+0 4 6 9 11 13 15 17 20 
+iA Vector0	0	0	0	1	1	2	2	2	3	3	4	4	5	5	6	6	7	7	7	
+jA Vector1	2	7	3	0	2	1	0	7	0	4	3	5	4	6	5	7	6	0	2	
+iU Vector0	0	0	0	1	2	3	4	5	6	
+jU Vector1	2	7	3	2	7	4	5	6	7	
+iL Vector1	2	2	3	4	5	6	7	7	7	
+jL Vector0	1	0	0	3	4	5	6	0	2	
+Debug ctor : m_num_nodelets = 8, m_num_rows = 8, m_num_rows_per_nodelet = 1
+LilSparseMatrix ctor: 0x180000000105680
+Debug : 1 Build method from LilSparse Started
+setElement, irow 1	icol 0	val 1	Nodelet num = 1	nodelet row = 0
+setElement, irow 2	icol 1	val 1	Nodelet num = 2	nodelet row = 0
+setElement, irow 2	icol 0	val 1	Nodelet num = 2	nodelet row = 0
+setElement, irow 3	icol 0	val 1	Nodelet num = 3	nodelet row = 0
+setElement, irow 4	icol 3	val 1	Nodelet num = 4	nodelet row = 0
+setElement, irow 5	icol 4	val 1	Nodelet num = 5	nodelet row = 0
+setElement, irow 6	icol 5	val 1	Nodelet num = 6	nodelet row = 0
+setElement, irow 7	icol 6	val 1	Nodelet num = 7	nodelet row = 0
+setElement, irow 7	icol 0	val 1	Nodelet num = 7	nodelet row = 0
+setElement, irow 7	icol 2	val 1	Nodelet num = 7	nodelet row = 0
+after build: size = 8x8, nvals = 10
+m_row_blocks addr: 0x28000020081c9c0
+m_row_blocks_repl addr: 0x28000020081c9c0
+Nodelet[0][0], addr = 0x180000040103960: 
+Nodelet[1][0], addr = 0x180000240103960: 	(0 : 1)
+Nodelet[2][0], addr = 0x180000440103960: 	(0 : 1)	(1 : 1)
+Nodelet[3][0], addr = 0x180000640103960: 	(0 : 1)
+Nodelet[4][0], addr = 0x180000840103960: 	(3 : 1)
+Nodelet[5][0], addr = 0x180000a40103960: 	(4 : 1)
+Nodelet[6][0], addr = 0x180000c40103960: 	(5 : 1)
+Nodelet[7][0], addr = 0x180000e40103960: 	(0 : 1)	(2 : 1)	(6 : 1)
+Running algorithm(s)...
+DEBUG: allocating temporary matrix.
+Debug ctor : m_num_nodelets = 8, m_num_rows = 8, m_num_rows_per_nodelet = 1
+LilSparseMatrix ctor: 0x180000000104b30
+DEBUG: before mxm function
+DEBUG: BEGIN compute T
+Debug ctor : m_num_nodelets = 8, m_num_rows = 8, m_num_rows_per_nodelet = 1
+LilSparseMatrix ctor: 0x180000000104fa0
+END compute T: size = 8x8, nvals = 19
+m_row_blocks addr: 0x28000020081ee80
+m_row_blocks_repl addr: 0x28000020081ee80
+Nodelet[0][0], addr = 0x1800000401039a0: 
+Nodelet[1][0], addr = 0x1800002401039a0: 	(1 : 1)	(2 : 1)	(3 : 1)	(7 : 1)
+Nodelet[2][0], addr = 0x1800004401039a0: 	(1 : 1)	(2 : 2)	(3 : 1)	(7 : 1)
+Nodelet[3][0], addr = 0x1800006401039a0: 	(1 : 1)	(2 : 1)	(3 : 1)	(7 : 1)
+Nodelet[4][0], addr = 0x1800008401039a0: 	(4 : 1)
+Nodelet[5][0], addr = 0x180000a401039a0: 	(5 : 1)
+Nodelet[6][0], addr = 0x180000c401039a0: 	(6 : 1)
+Nodelet[7][0], addr = 0x180000e401039a0: 	(1 : 1)	(2 : 1)	(3 : 1)	(7 : 3)
+DEBUG: BEGIN compute Z
+Debug ctor : m_num_nodelets = 8, m_num_rows = 8, m_num_rows_per_nodelet = 1
+LilSparseMatrix ctor: 0x180000000105018
+(again) T: size = 8x8, nvals = 19
+m_row_blocks addr: 0x28000020081ee80
+m_row_blocks_repl addr: 0x28000020081ee80
+Nodelet[0][0], addr = 0x1800000401039a0: 
+Nodelet[1][0], addr = 0x1800002401039a0: 	(1 : 1)	(2 : 1)	(3 : 1)	(7 : 1)
+Nodelet[2][0], addr = 0x1800004401039a0: 	(1 : 1)	(2 : 2)	(3 : 1)	(7 : 1)
+Nodelet[3][0], addr = 0x1800006401039a0: 	(1 : 1)	(2 : 1)	(3 : 1)	(7 : 1)
+Nodelet[4][0], addr = 0x1800008401039a0: 	(4 : 1)
+Nodelet[5][0], addr = 0x180000a401039a0: 	(5 : 1)
+Nodelet[6][0], addr = 0x180000c401039a0: 	(6 : 1)
+Nodelet[7][0], addr = 0x180000e401039a0: 	(1 : 1)	(2 : 1)	(3 : 1)	(7 : 3)
+ewise_or_opt_accum, T (src): size = 8x8, nvals = 19
+m_row_blocks addr: 0x28000020081ee80
+m_row_blocks_repl addr: 0x28000020081ee80
+Nodelet[0][0], addr = 0x1800000401039a0: 
+Nodelet[1][0], addr = 0x1800002401039a0: 	(1 : 1)	(2 : 1)	(3 : 1)	(7 : 1)
+Nodelet[2][0], addr = 0x1800004401039a0: 	(1 : 1)	(2 : 2)	(3 : 1)	(7 : 1)
+Nodelet[3][0], addr = 0x1800006401039a0: 	(1 : 1)	(2 : 1)	(3 : 1)	(7 : 1)
+Nodelet[4][0], addr = 0x1800008401039a0: 	(4 : 1)
+Nodelet[5][0], addr = 0x180000a401039a0: 	(5 : 1)
+Nodelet[6][0], addr = 0x180000c401039a0: 	(6 : 1)
+Nodelet[7][0], addr = 0x180000e401039a0: 	(1 : 1)	(2 : 1)	(3 : 1)	(7 : 3)
+ewise_or_opt_accum, Z (dst): size = 8x8, nvals = 0
+m_row_blocks addr: 0x28000020081ef80
+m_row_blocks_repl addr: 0x28000020081ef80
+Nodelet[0][0], addr = 0x1800000401039c0: 
+Nodelet[1][0], addr = 0x1800002401039c0: 
+Nodelet[2][0], addr = 0x1800004401039c0: 
+Nodelet[3][0], addr = 0x1800006401039c0: 
+Nodelet[4][0], addr = 0x1800008401039c0: 
+Nodelet[5][0], addr = 0x180000a401039c0: 
+Nodelet[6][0], addr = 0x180000c401039c0: 
+Nodelet[7][0], addr = 0x180000e401039c0: 
+DEBUG: sparse_copy clear dst
+dstMatrix: size = 8x8, nvals = 0
+m_row_blocks addr: 0x28000020081ef80
+m_row_blocks_repl addr: 0x28000020081ef80
+Nodelet[0][0], addr = 0x1800000401039c0: 
+Nodelet[1][0], addr = 0x1800002401039c0: 
+Nodelet[2][0], addr = 0x1800004401039c0: 
+Nodelet[3][0], addr = 0x1800006401039c0: 
+Nodelet[4][0], addr = 0x1800008401039c0: 
+Nodelet[5][0], addr = 0x180000a401039c0: 
+Nodelet[6][0], addr = 0x180000c401039c0: 
+Nodelet[7][0], addr = 0x180000e401039c0: 
+srcMatrix: size = 8x8, nvals = 19
+m_row_blocks addr: 0x28000020081ee80
+m_row_blocks_repl addr: 0x28000020081ee80
+Nodelet[0][0], addr = 0x1800000401039a0: 
+Nodelet[1][0], addr = 0x1800002401039a0: 	(1 : 1)	(2 : 1)	(3 : 1)	(7 : 1)
+Nodelet[2][0], addr = 0x1800004401039a0: 	(1 : 1)	(2 : 2)	(3 : 1)	(7 : 1)
+Nodelet[3][0], addr = 0x1800006401039a0: 	(1 : 1)	(2 : 1)	(3 : 1)	(7 : 1)
+Nodelet[4][0], addr = 0x1800008401039a0: 	(4 : 1)
+Nodelet[5][0], addr = 0x180000a401039a0: 	(5 : 1)
+Nodelet[6][0], addr = 0x180000c401039a0: 	(6 : 1)
+Nodelet[7][0], addr = 0x180000e401039a0: 	(1 : 1)	(2 : 1)	(3 : 1)	(7 : 3)
+DEBUG: sparse_copy copy row 0
+DEBUG: sparse_copy copy row 1
+DEBUG: sparse_copy copy row 2
+DEBUG: sparse_copy copy row 3
+DEBUG: sparse_copy copy row 4
+DEBUG: sparse_copy copy row 5
+DEBUG: sparse_copy copy row 6
+DEBUG: sparse_copy copy row 7
+END compute Z: size = 8x8, nvals = 19
+m_row_blocks addr: 0x28000020081ef80
+m_row_blocks_repl addr: 0x28000020081ef80
+Nodelet[0][0], addr = 0x1800000401039c0: 
+Nodelet[1][0], addr = 0x1800002401039c0: 	(1 : 1)	(2 : 1)	(3 : 1)	(7 : 1)
+Nodelet[2][0], addr = 0x1800004401039c0: 	(1 : 1)	(2 : 2)	(3 : 1)	(7 : 1)
+Nodelet[3][0], addr = 0x1800006401039c0: 	(1 : 1)	(2 : 1)	(3 : 1)	(7 : 1)
+Nodelet[4][0], addr = 0x1800008401039c0: 	(4 : 1)
+Nodelet[5][0], addr = 0x180000a401039c0: 	(5 : 1)
+Nodelet[6][0], addr = 0x180000c401039c0: 	(6 : 1)
+Nodelet[7][0], addr = 0x180000e401039c0: 	(1 : 1)	(2 : 1)	(3 : 1)	(7 : 3)
+DEBUG: BEGIN compute C
+END compute C: size = 8x8, nvals = 2
+m_row_blocks addr: 0x28000020081ed80
+m_row_blocks_repl addr: 0x28000020081ed80
+Nodelet[0][0], addr = 0x180000040103980: 
+Nodelet[1][0], addr = 0x180000240103980: 
+Nodelet[2][0], addr = 0x180000440103980: 	(1 : 1)
+Nodelet[3][0], addr = 0x180000640103980: 
+Nodelet[4][0], addr = 0x180000840103980: 
+Nodelet[5][0], addr = 0x180000a40103980: 
+Nodelet[6][0], addr = 0x180000c40103980: 
+Nodelet[7][0], addr = 0x180000e40103980: 	(2 : 1)
+LilSparseMatrix dtor: 0x180000000105018
+LilSparseMatrix dtor: 0x180000000104fa0
+DEBUG: before reduce function
+LilSparseMatrix dtor: 0x180000000104b30
+# triangles (masked) = 2
+Elapsed time: 528 msec.
+LilSparseMatrix dtor: 0x180000000105680
+End untimed simulation with local date and time= Sat Dec  8 00:33:26 2018
+

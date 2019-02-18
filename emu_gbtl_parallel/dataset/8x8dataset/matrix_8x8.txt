@@ -1,0 +1,78 @@
+0, 1, 1, 1, 0, 0, 0, 1, 
+1, 0, 1, 0, 0, 0, 0, 0,
+
+1, 1, 0, 0, 0, 0, 0, 1, 
+
+1, 0, 0, 0, 1, 0, 0, 0, 
+
+0, 0, 0, 1, 0, 1, 0, 0, 
+0, 0, 0, 0, 1, 0, 1, 0, 
+0, 0, 0, 0, 0, 1, 0, 1, 
+1, 0, 1, 0, 0, 0, 1, 0, 
+
+
+
+
+0,  
+1, 0,   
+1, 1, 0,  
+
+1, 0, 0, 0,  
+
+0, 0, 0, 1, 0,  
+0, 0, 0, 0, 1, 0,  
+0, 0, 0, 0, 0, 1, 0,   
+1, 0, 1, 0, 0, 0, 1, 0, 
+
+
+0
+
+[
+val_Arr[nodelet_nnz]
+row_ptr[nodelet_num_rows +1]
+col_ptr[nodelet_nnz]
+]
+
+
+
+vector[[V],[C],[R]]
+
+
+
+typedef std::vector<std::vector<int>> varname(3);
+
+
+
+typedef struct vertex {
+  int val_arr[Nnnz];
+  
+} vertex;
+
+vertex **Vertex = (vertex **)mw_malloc2d(NODELETS(), sizeof(vertex) * vpn); 
+
+
+
+array<int, 5>  
+array<int, 5>  
+array<int, 2>
+
+
+
+container [3]
+
+
+2D array
+
+
+
+
+
+
+
+
+
+
+
+
+
+
