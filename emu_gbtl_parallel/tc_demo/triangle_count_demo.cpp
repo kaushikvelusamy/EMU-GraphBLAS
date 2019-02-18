@@ -16,6 +16,7 @@ int main(int argc, char **argv) {
              starttiming();
          #endif
   
+        starttiming();
 	if (argc < 2)
 	{
 		std::cerr << "ERROR: too few arguments." << std::endl;

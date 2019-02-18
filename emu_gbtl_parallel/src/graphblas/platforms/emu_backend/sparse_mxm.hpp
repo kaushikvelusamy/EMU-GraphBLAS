@@ -16,6 +16,7 @@
 #include "sparse_helpers.hpp"
 #include "LilSparseMatrix.hpp"
 
+#include "cilk.h"
 
 //****************************************************************************
 
@@ -71,32 +72,38 @@ namespace GraphBLAS
 
                     if (!B_col.empty())
                     {
+                      D3ScalarType T_val[nrow_A];
+                      memset(T_val, 0, nrow_A * sizeof(D3ScalarType));
                         for (IndexType row_idx = 0; row_idx < nrow_A; ++row_idx)
                         {
                             typename AMatrixT::RowType A_row(A.getRow(row_idx));
                             if (!A_row.empty())
                             {
 #ifdef DEBUG
-                              std::cout << std:: endl << std:: endl <<" Operation Started";
+                              std::cout << std:: endl << "Dot Operation Started : RowID "<< row_idx<< " ColID  "<< col_idx << std::endl;
 #endif
-                                D3ScalarType T_val;
-                                if (dot(T_val, A_row, B_col, op))
-                                {
-#ifdef DEBUG
-                                   std::cout << std:: endl <<"Pushing back to TCOL" << std:: endl ;
-#endif
-                                    T_col.push_back(
-                                            std::make_tuple(row_idx, T_val));
-                                }
+                              cilk_spawn dot(T_val, A_row, B_col, op, row_idx);
                             }
                         }
-#ifdef DEBUG
-                        std::cout << std:: endl <<"end of row" << std:: endl ;
+                        cilk_sync;
+#ifdef DEBUG        
+                        std::cout <<"Completed 1 entire row of dot product operation \n Print TVAL array ";
 #endif
+                        for (IndexType row_idx = 0; row_idx < nrow_A; ++row_idx)
+                        {
+                          if (T_val[row_idx] != 0)
+                          {
+#ifdef DEBUG
+                            std::cout << T_val[row_idx] << " ";
+#endif
+                            T_col.push_back(std::make_tuple(row_idx, T_val[row_idx]));
+                           }
+                          }
+                          
                         if (!T_col.empty())
                         {
 #ifdef DEBUG
-                            std::cout << std:: endl <<"Pushing back to T" << std:: endl ;
+                            std::cout << std:: endl <<"Pushing each answer row vector back to the big T Lil storage " << std:: endl;
 #endif
                             T.setCol(col_idx, T_col);
                             T_col.clear();

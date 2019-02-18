@@ -45,7 +45,7 @@ run: $(EXE_NAME).mwx
 
 .PHONY: clean
 clean:
-	rm -f *.o *.mwx *.ll *.s *.sxp *.cdc *.vsf *.hdd *.tqd $(EXE_NAME)
+	rm -f *.o *.mwx *.ll *.s *.sxp *.cdc *.vsf *.hdd *.tqd *.trace $(EXE_NAME)
 
 %.tqd: %.mwx
 	$(EMUSIM) --capture_timing_queues -o $* $< $(INPUTS)

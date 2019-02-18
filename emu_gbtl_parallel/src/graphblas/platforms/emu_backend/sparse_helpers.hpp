@@ -163,18 +163,20 @@ namespace GraphBLAS
 
         //************************************************************************
         /// A dot product of two sparse vectors (vectors<tuple(index,value)>)
-        template <typename D1, typename D2, typename D3, typename SemiringT>
-        bool dot(D3                                                      &ans,
+    template <typename D1, typename D2, typename D3, typename SemiringT, typename D4>
+        void dot(D3                                                      ans[],
                  std::vector<std::tuple<GraphBLAS::IndexType,D1> > const &vec1,
                  std::vector<std::tuple<GraphBLAS::IndexType,D2> > const &vec2,
-                 SemiringT                                                op)
+                 SemiringT                                                op,
+                 D4                                                       r_id)
         {
+            D3 temp_ans;
             bool value_set(false);
-            ans = op.zero();
+            temp_ans = op.zero();
 
             if (vec2.empty() || vec1.empty())
             {
-                return value_set;
+                return;
             }
 
             auto v1_it = vec1.begin();
@@ -192,18 +194,18 @@ namespace GraphBLAS
                 std::tie(a_idx, a_val) = *v1_it;
                 std::tie(u_idx, u_val) = *v2_it;
 #ifdef DEBUG  
-                std::cout << "Examine u idx,val = " << u_idx << "," << u_val
-                          << "; A col_idx,val = " << a_idx << "," << a_val << std::endl;
+                std::cout << std::endl << "u_idx  " << u_idx << "u_val " << u_val
+                          << " a_idx " << a_idx << " a_val " << a_val << std::endl;
 #endif
                 if (u_idx == a_idx)
                 {
 #ifdef DEBUG  
-                    std::cout << ans << " + " << a_val << " * " << u_val << " = ";
+                    std::cout << temp_ans << " + " << a_val << " * " << u_val << " = ";
 #endif
-                    ans = op.add(ans, op.mult(a_val, u_val));
+                    temp_ans = op.add(temp_ans, op.mult(a_val, u_val));
                     value_set = true;
 #ifdef DEBUG 
-                    std::cout << ans << std::endl;
+                    std::cout << temp_ans << std::endl;
 #endif 
                     ++v2_it;
                     ++v1_it;
@@ -220,7 +222,8 @@ namespace GraphBLAS
                 }
             }
 	    
-            return value_set;
+            if (value_set)
+              ans[r_id] = temp_ans;
         }
 
         //************************************************************************

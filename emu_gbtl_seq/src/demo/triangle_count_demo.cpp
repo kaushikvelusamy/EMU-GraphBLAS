@@ -46,7 +46,7 @@ int main(int argc, char **argv)
         std::cerr << "ERROR: too few arguments." << std::endl;
         exit(1);
     }
-
+	starttiming();
     // Read the edgelist and create the tuple arrays
     //std::string pathname(argv[1]);
     //std::ifstream infile(pathname);
