@@ -194,7 +194,7 @@ namespace GraphBLAS
                 std::tie(a_idx, a_val) = *v1_it;
                 std::tie(u_idx, u_val) = *v2_it;
 #ifdef DEBUG  
-                std::cout << std::endl << "u_idx  " << u_idx << "u_val " << u_val
+                std::cout << std::endl << "u_idx " << u_idx << " u_val " << u_val
                           << " a_idx " << a_idx << " a_val " << a_val << std::endl;
 #endif
                 if (u_idx == a_idx)

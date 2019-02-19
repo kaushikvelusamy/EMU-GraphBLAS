@@ -22,126 +22,131 @@
 
 namespace GraphBLAS
 {
-    namespace backend
-    {
-        //**********************************************************************
-        /// Implementation of 4.3.1 mxm: Matrix-matrix multiply
-        template<typename CMatrixT,
-                 typename MMatrixT,
-                 typename AccumT,
-                 typename SemiringT,
-                 typename AMatrixT,
-                 typename BMatrixT>
-        inline Info mxm(CMatrixT            &C,
-                        MMatrixT    const   &M,
-                        AccumT      const   &accum,
-                        SemiringT            op,
-                        AMatrixT    const   &A,
-                        BMatrixT    const   &B,
-                        bool                 replace_flag = false)
-        {
-            // Dimension checks happen in front end
-            IndexType nrow_A(A.nrows());
-            IndexType ncol_B(B.ncols());
-            //Frontend checks the dimensions, but use C explicitly
-            IndexType nrow_C(C.nrows());
-            IndexType ncol_C(C.ncols());
+	namespace backend
+	{
+		//**********************************************************************
+		/// Implementation of 4.3.1 mxm: Matrix-matrix multiply
+		template<typename CMatrixT,
+			typename MMatrixT,
+			typename AccumT,
+			typename SemiringT,
+			typename AMatrixT,
+			typename BMatrixT>
+				inline Info mxm(CMatrixT            &C,
+						MMatrixT    const   &M,
+						AccumT      const   &accum,
+						SemiringT            op,
+						AMatrixT    const   &A,
+						BMatrixT    const   &B,
+						bool                 replace_flag = false)
+				{
+					// Dimension checks happen in front end
+					IndexType nrow_A(A.nrows());
+					IndexType ncol_B(B.ncols());
+					//Frontend checks the dimensions, but use C explicitly
+					IndexType nrow_C(C.nrows());
+					IndexType ncol_C(C.ncols());
 
-            typedef typename SemiringT::result_type D3ScalarType;
-            typedef typename AMatrixT::ScalarType AScalarType;
-            typedef typename BMatrixT::ScalarType BScalarType;
-            typedef typename CMatrixT::ScalarType CScalarType;
-            typedef std::vector<std::tuple<IndexType,CScalarType> > CColType;
-            typedef std::vector<std::tuple<IndexType,D3ScalarType> > TColType;
+					typedef typename SemiringT::result_type D3ScalarType;
+					typedef typename AMatrixT::ScalarType AScalarType;
+					typedef typename BMatrixT::ScalarType BScalarType;
+					typedef typename CMatrixT::ScalarType CScalarType;
+					typedef std::vector<std::tuple<IndexType,CScalarType> > CColType;
+					typedef std::vector<std::tuple<IndexType,D3ScalarType> > TColType;
 
-            // =================================================================
-            // Do the basic dot-product work with the semi-ring.
+					// =================================================================
+					// Do the basic dot-product work with the semi-ring.
 #ifdef DEBUG
-            std::cout << "DEBUG: BEGIN compute T" << std::endl;
+					std::cout << "DEBUG: BEGIN compute T" << std::endl;
 #endif
-            LilSparseMatrix<D3ScalarType> T(nrow_A, ncol_B);
+					LilSparseMatrix<D3ScalarType> T(nrow_A, ncol_B);
 
-            // Build this completely based on the semiring
-            if ((A.nvals() > 0) && (B.nvals() > 0))
-            {
-                // create a column of result at a time
-                TColType T_col;
-                for (IndexType col_idx = 0; col_idx < ncol_B; ++col_idx)
-                {
-                    typename BMatrixT::ColType B_col(B.getCol(col_idx));
+					// Build this completely based on the semiring
+					if ((A.nvals() > 0) && (B.nvals() > 0))
+					{
+						// create a column of result at a time
+						TColType T_row;
 
-                    if (!B_col.empty())
-                    {
-                      D3ScalarType T_val[nrow_A];
-                      memset(T_val, 0, nrow_A * sizeof(D3ScalarType));
-                        for (IndexType row_idx = 0; row_idx < nrow_A; ++row_idx)
-                        {
-                            typename AMatrixT::RowType A_row(A.getRow(row_idx));
-                            if (!A_row.empty())
-                            {
+
+						for (IndexType row_idx = 0; row_idx < nrow_A; ++row_idx)
+						{
+							typename AMatrixT::RowType A_row(A.getRow(row_idx));
+							if (!A_row.empty())
+							{
+
+								D3ScalarType T_val[ncol_B];
+								memset(T_val, 0, nrow_A * sizeof(D3ScalarType));
+
+								for (IndexType col_idx = 0; col_idx < ncol_B; ++col_idx)
+								{
+									typename BMatrixT::ColType B_col(B.getCol(col_idx));
+
+									if (!B_col.empty())
+									{
+
 #ifdef DEBUG
-                              std::cout << std:: endl << "Dot Operation Started : RowID "<< row_idx<< " ColID  "<< col_idx << std::endl;
+										std::cout << std:: endl << "Dot Operation Started : RowID "<< row_idx<< " ColID  "<< col_idx << std::endl;
 #endif
-                              cilk_spawn dot(T_val, A_row, B_col, op, row_idx);
-                            }
-                        }
-                        cilk_sync;
+									cilk_spawn dot(T_val, A_row, B_col, op, col_idx);
+									}
+								}
+                                                                cilk_sync;
 #ifdef DEBUG        
-                        std::cout <<"Completed 1 entire row of dot product operation \n Print TVAL array ";
+								std::cout <<"Completed 1 entire row of dot product operation \n Print TVAL array ";
 #endif
-                        for (IndexType row_idx = 0; row_idx < nrow_A; ++row_idx)
-                        {
-                          if (T_val[row_idx] != 0)
-                          {
+								for (IndexType col_idx = 0; col_idx < ncol_B; ++col_idx)
+								{
+                                                                  if (T_val[col_idx] != 0)
+									{
 #ifdef DEBUG
-                            std::cout << T_val[row_idx] << " ";
+										std::cout << T_val[col_idx] << " ";
 #endif
-                            T_col.push_back(std::make_tuple(row_idx, T_val[row_idx]));
-                           }
-                          }
-                          
-                        if (!T_col.empty())
-                        {
-#ifdef DEBUG
-                            std::cout << std:: endl <<"Pushing each answer row vector back to the big T Lil storage " << std:: endl;
-#endif
-                            T.setCol(col_idx, T_col);
-                            T_col.clear();
-                        }
-                    }
-                }
-            }
-#ifdef DEBUG
-           T.printInfo(std::cout, "END compute T");
+										T_row.push_back(std::make_tuple(col_idx, T_val[col_idx]));
+									}
+								}
 
-            // =================================================================
-            // Accumulate into Z
-            std::cout << "DEBUG: BEGIN compute Z" << std::endl;
-#endif            
-            typedef typename std::conditional<
-                std::is_same<AccumT, NoAccumulate>::value,
-                D3ScalarType,
-                typename AccumT::result_type>::type ZScalarType;
-            LilSparseMatrix<ZScalarType> Z(nrow_C, ncol_C);
+								if (!T_row.empty())
+								{
 #ifdef DEBUG
-            T.printInfo(std::cout, "(again) T");
-#endif            
-            ewise_or_opt_accum(Z, C, T, accum);
+									std::cout << std:: endl <<"Pushing each answer row vector back to the big T Lil storage " << std:: endl;
+#endif
+									T.setRow(row_idx, T_row);
+									T_row.clear();
+								}
+							}
+						}
+					}
 #ifdef DEBUG
-           Z.printInfo(std::cout, "END compute Z");
+					T.printInfo(std::cout, "END compute T");
 
-            // =================================================================
-            // Copy Z into the final output considering mask and replace
-            std::cout << "DEBUG: BEGIN compute C" << std::endl;
-#endif
-            
-            write_with_opt_mask(C, Z, M, replace_flag);
+					// =================================================================
+					// Accumulate into Z
+					std::cout << "DEBUG: BEGIN compute Z" << std::endl;
+#endif            
+					typedef typename std::conditional<
+						std::is_same<AccumT, NoAccumulate>::value,
+						D3ScalarType,
+						typename AccumT::result_type>::type ZScalarType;
+					LilSparseMatrix<ZScalarType> Z(nrow_C, ncol_C);
 #ifdef DEBUG
-            C.printInfo(std::cout, "END compute C");
+					T.printInfo(std::cout, "(again) T");
+#endif            
+					ewise_or_opt_accum(Z, C, T, accum);
+#ifdef DEBUG
+					Z.printInfo(std::cout, "END compute Z");
+
+					// =================================================================
+					// Copy Z into the final output considering mask and replace
+					std::cout << "DEBUG: BEGIN compute C" << std::endl;
 #endif
-            return SUCCESS;
-        } // mxm
-    } // backend
+
+					write_with_opt_mask(C, Z, M, replace_flag);
+#ifdef DEBUG
+					C.printInfo(std::cout, "END compute C");
+#endif
+					return SUCCESS;
+				} // mxm
+	} // backend
 } // GraphBLAS
 
 #endif
