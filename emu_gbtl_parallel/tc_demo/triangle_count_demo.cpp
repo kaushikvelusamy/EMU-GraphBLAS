@@ -12,13 +12,7 @@
 //****************************************************************************
 int main(int argc, char **argv) {
 
-         #ifdef SIMULATOR
-             starttiming();
-         #endif
-  
-        starttiming();
-	if (argc < 2)
-	{
+        if (argc < 2) { 
 		std::cerr << "ERROR: too few arguments." << std::endl;
 		std::cerr << "Usage: " << argv[0] << " <filename>" << std::endl;
 		exit(1);
@@ -42,10 +36,9 @@ int main(int argc, char **argv) {
 	GraphBLAS::IndexArrayType :: iterator i;
 
 	while (infile >> src >> dst) {
-
-                #ifdef DEBUG
+#ifdef DEBUG
 		std::cout << "Read " << num_rows<<": "<< src << ", " << dst << std::endl;
-                #endif
+#endif
                 
 		if (src > max_id) max_id = src;
 		if (dst > max_id) max_id = dst;
@@ -70,62 +63,6 @@ int main(int argc, char **argv) {
 #ifdef DEBUG
 	std::cout << "Read " << num_rows << " rows." << std::endl;
 	std::cout << "#Nodes = " << (max_id + 1) << std::endl;
-	std::cout << "Constructing my CSR Matrix " << std::endl;
-#endif
-        
-// Fixing the some of the name ambuity in num_rows(Rows in ip file or NNZ) and numRows, and, max_id and actual number of rows in my matrix
-	int nnz = num_rows;
-	int numRows = max_id + 1;
-	int csr_val[nnz];
-	int csr_col[nnz];
-	int csr_rptr[numRows+1];
-
-	for ( int k =0; k< nnz ; k++)
-	{
-		csr_val[k] = 1;
-
-                #ifdef DEBUG
-                std::cout<<csr_val[k]<<" ";
-                #endif
-	}
-         #ifdef DEBUG
-                std::cout<< nnz<< std::endl;
-         #endif
-                
-	for ( int k =0; k< nnz ; k++)
-		csr_col[k] = 0;
-	for ( int k =0; k< numRows+1 ; k++)
-		csr_rptr[k] =0;
-
-/*
-0 0 1 3 5 1 1 1 1 1 
-0 0 1 1 2 2 0 2 105 1085416 
-0 25165824 0 0 0 
-*/
-	for ( int k =0; k< nnz ; k++)
-		csr_col[k] = jA[k];
-	
-	for ( int k =0; k<(numRows+1); k++)
-	{
-		if(k == 0)
-			csr_rptr[k] = 0;
-		else
-			csr_rptr[k] = csr_rptr[k-1] + count(iA.begin(), iA.end(), k-1);
-	}
-
-
-        #ifdef DEBUG
-        
-	std::cout<< std::endl;
-
-	for ( int k =0; k< nnz ; k++)
-		std::cout<<csr_col[k]<<" ";
-
-	std::cout<< std::endl;
-
-	for ( int k =0; k< numRows+1 ; k++)
-		std::cout<<csr_rptr[k]<<" ";
-
 	std::cout<< std::endl;
 
 	      std::cout <<"iA Vector";
@@ -187,26 +124,29 @@ int main(int argc, char **argv) {
         long nidstart = NODE_ID();
         unsigned long tic = CLOCK();
 	auto start = std::chrono::steady_clock::now();
-
 #endif
         
 	T count = algorithms::triangle_count_masked(L);
 
-     #ifdef HARDWARE
+#ifdef HARDWARE
         //   MIGRATE(InputArray);
-        	auto duration = std::chrono::duration_cast<std::chrono::milliseconds>
-		(std::chrono::steady_clock::now() - start);
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds> (std::chrono::steady_clock::now() - start);
                 
         unsigned long toc = CLOCK();
         long nidend = NODE_ID();
+      
+        float clock_rate = 175.00;
         if(nidstart != nidend) {
-            printf("WARNING: Start and end nodes differ for timings\n");
+          std::cout<< "Timing problem " << nidstart << nidend << std::endl;
         }
-        printf("######## TOTAL CYCLES: %ld\n", toc-tic);
-
-       
-	std::cout << "# triangles (masked) = " << count << std::endl;
-	std::cout << "Elapsed time: " << duration.count() << " msec." << std::endl;
-    #endif
+        long total_cycles = toc - tic;
+        double ms = ((double) total_cycles / clock_rate ) / 1000.0;
+         
+        std::cout << "Number of triangles (masked algorithm gbtl) : " << count << std::endl;
+        std::cout << "Elapsed time from chrono : " << duration.count() << " msec." << std::endl;
+        std::cout << "Elapsed time from EMU clock() : " << ms << "ms" <<std::endl;
+        std::cout << "TOTAL EMU Clock Cycles : " << total_cycles << std::endl;
+        
+#endif
 	return 0;
 }

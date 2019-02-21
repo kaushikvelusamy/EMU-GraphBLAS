@@ -1,21 +1,21 @@
 ,function_name,migration_count,total_instruction_count,total_regs_migrated,percent_total_instructions,percent_total_migrations
-0,std::__1::num_get<...>::__do_get_unsigned<...>,0,24680,0,7.81943071503,0.0
-1,std::__1::__num_get<char>::__stage2_int_loop,0,24280,0,7.69269764023,0.0
-2,std::__1::__num_get<char>::__stage2_int_prep,0,24080,0,7.62933110283,0.0
-3,malloc,0,15706,0,4.97617418194,0.0
-4,memset,0,15205,0,4.81744100575,0.0
-5,memcpy,10,13712,230,4.34440980407,0.529100529101
-6,std::__1::basic_istream<...>::sentry::sentry,0,12180,0,3.85902212759,0.0
-7,free,21,11578,483,3.66828885002,1.11111111111
-8,__intscan,0,10240,0,3.24436671483,0.0
-9,GraphBLAS::backend::mxm<...>,294,9677,5929,3.06598991205,15.5555555556
-10,main,28,8909,644,2.82266240844,1.48148148148
-11,std::__1::vector<...>::__push_back_slow_path<...>,0,6474,0,2.0511748156,0.0
-12,GraphBLAS::backend::LilSparseMatrix<int>::setCol<int>,196,6374,4508,2.0194915469,10.3703703704
-13,operator new,0,6348,0,2.01125389704,0.0
-14,GraphBLAS::backend::dot<...>,140,6093,2709,1.93046156186,7.40740740741
-15,std::__1::vector<...>::__push_back_slow_path<...>,103,6091,2369,1.92982789648,5.44973544974
-16,std::__1::__num_get_unsigned_integral<...>,0,6040,0,1.91366942945,0.0
-17,std::__1::vector<...>::insert,242,6004,5566,1.90226345272,12.8042328042
-18,mw_localmalloc,56,5697,1288,1.80499581781,2.96296296296
-19,__strtoull_internal,0,5620,0,1.78059970091,0.0
+0,free,6,3690,138,10.6199274737,1.35746606335
+1,malloc,0,3641,0,10.4789040465,0.0
+2,GraphBLAS::backend::mxm<...>,90,3111,1917,8.95354860991,20.3619909502
+3,std::__1::vector<...>::__push_back_slow_path<...>,0,2320,0,6.67702757152,0.0
+4,memcpy,0,2259,0,6.50146779485,0.0
+5,operator delete,6,1872,138,5.38767052323,1.35746606335
+6,std::__1::vector<...>::assign<...>,52,1616,1196,4.65089506706,11.7647058824
+7,operator new,0,1596,0,4.59333448454,0.0
+8,mw_localmalloc,12,1376,276,3.9601680769,2.7149321267
+9,GraphBLAS::backend::apply_with_mask<...>,78,1218,1794,3.50543947505,17.6470588235
+10,GraphBLAS::backend::sparse_copy<...>,58,1217,1334,3.50256144592,13.1221719457
+11,GraphBLAS::backend::dot<...>,24,1179,465,3.39319633915,5.42986425339
+12,GraphBLAS::backend::LilSparseMatrix<int>::LilSparseMatrix,36,890,828,2.56144592183,8.14479638009
+13,llvm.memcpy.p0i8.p0i8.i64,0,800,0,2.30242330052,0.0
+14,mw_malloc2d,0,722,0,2.07793702872,0.0
+15,mw_free,0,708,0,2.03764462096,0.0
+16,GraphBLAS::backend::write_with_opt_mask<...>,30,655,690,1.8851090773,6.78733031674
+17,main,12,428,276,1.23179646578,2.7149321267
+18,GraphBLAS::backend::reduce_matrix_to_scalar<...>,16,415,368,1.19438208715,3.61990950226
+19,memset,0,309,0,0.889310999827,0.0

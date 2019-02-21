@@ -6,6 +6,7 @@
 
 #include <graphblas/graphblas.hpp>
 
+
 namespace algorithms
 
 {
@@ -22,6 +23,11 @@ namespace algorithms
 #ifdef DEBUG
         std::cout << "DEBUG: before mxm function"<< std::endl;
 #endif
+
+#ifdef SIMULATOR
+	starttiming();
+#endif
+
         GraphBLAS::mxm(B,
                        L, GraphBLAS::NoAccumulate(),
                        GraphBLAS::ArithmeticSemiring<T>(),

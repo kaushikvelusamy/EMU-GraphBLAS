@@ -8,7 +8,6 @@
 #include <vector>
 #include <iterator>
 #include <iostream>
-#include <chrono>
 
 #include <graphblas/types.hpp>
 #include <graphblas/algebra.hpp>
@@ -60,39 +59,32 @@ namespace GraphBLAS
 					std::cout << "DEBUG: BEGIN compute T" << std::endl;
 #endif
 					LilSparseMatrix<D3ScalarType> T(nrow_A, ncol_B);
-
 					// Build this completely based on the semiring
 					if ((A.nvals() > 0) && (B.nvals() > 0))
 					{
-						// create a column of result at a time
+						// create a row of result at a time
 						TColType T_row;
-
-
 						for (IndexType row_idx = 0; row_idx < nrow_A; ++row_idx)
 						{
 							typename AMatrixT::RowType A_row(A.getRow(row_idx));
 							if (!A_row.empty())
 							{
-
 								D3ScalarType T_val[ncol_B];
-								memset(T_val, 0, nrow_A * sizeof(D3ScalarType));
-
+								memset(T_val, 0, ncol_B * sizeof(D3ScalarType));
 								for (IndexType col_idx = 0; col_idx < ncol_B; ++col_idx)
 								{
 									typename BMatrixT::ColType B_col(B.getCol(col_idx));
-
 									if (!B_col.empty())
 									{
-
 #ifdef DEBUG
-										std::cout << std:: endl << "Dot Operation Started : RowID "<< row_idx<< " ColID  "<< col_idx << std::endl;
+								       	std::cout << std:: endl << "Dot Operation Started : RowID "<< row_idx<< " ColID  "<< col_idx << std::endl;
 #endif
 									cilk_spawn dot(T_val, A_row, B_col, op, col_idx);
 									}
 								}
                                                                 cilk_sync;
 #ifdef DEBUG        
-								std::cout <<"Completed 1 entire row of dot product operation \n Print TVAL array ";
+								std::cout <<"Completed 1 entire row of dot product operation \n Printing T_row array ";
 #endif
 								for (IndexType col_idx = 0; col_idx < ncol_B; ++col_idx)
 								{
@@ -104,11 +96,10 @@ namespace GraphBLAS
 										T_row.push_back(std::make_tuple(col_idx, T_val[col_idx]));
 									}
 								}
-
 								if (!T_row.empty())
 								{
 #ifdef DEBUG
-									std::cout << std:: endl <<"Pushing each answer row vector back to the big T Lil storage " << std:: endl;
+									std::cout << std:: endl <<"Pushing each T_row vector back to the big T Lil storage " << std:: endl;
 #endif
 									T.setRow(row_idx, T_row);
 									T_row.clear();

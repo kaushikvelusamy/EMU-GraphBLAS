@@ -39,7 +39,7 @@ namespace GraphBLAS
                   m_row_blocks_repl(NULL)
             {
 #ifdef DEBUG                
-                  std::cout << "Debug ctor : m_num_nodelets = " << m_num_nodelets
+                  std::cout << "Debug vector : m_num_nodelets = " << m_num_nodelets
                           << ", m_num_rows = " << m_num_rows
                           << ", m_num_rows_per_nodelet = " << m_num_rows_per_nodelet
                           << std::endl;
@@ -62,6 +62,8 @@ namespace GraphBLAS
                         (pSparseRow)mw_localmalloc(sizeof(pSparseRow),
                                                    m_row_blocks_repl[nodelet_id]);
                     pSparseRow dummyPtr = new(lvar[row_id]) SparseRow();
+                    //std::cout << dummyPtr << std::endl ;
+                    dummyPtr = dummyPtr;
                 }
 #ifdef DEBUG  
                 std::cout << "LilSparseMatrix ctor: " << this << std::endl<< std::endl;
