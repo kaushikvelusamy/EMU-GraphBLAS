@@ -25,7 +25,7 @@ namespace algorithms
 #endif
 
 #ifdef SIMULATOR
-	starttiming();
+        starttiming();
 #endif
 
         GraphBLAS::mxm(B,
@@ -42,6 +42,6 @@ namespace algorithms
                           B);
         return sum;
     }
-} // algorithms
+}  // end namespace algorithms
 
-#endif // ALGORITHMS_TRIANGLE_COUNT_HPP
+#endif  // ALGORITHMS_TRIANGLE_COUNT_HPP

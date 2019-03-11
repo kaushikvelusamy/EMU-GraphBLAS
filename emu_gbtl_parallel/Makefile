@@ -1,5 +1,6 @@
 # Tools
 BIN_DIR ?= /usr/local/emu-18.08.1/bin
+# BIN_DIR ?= /usr/local/emu-19.02/bin
 
 CC = $(BIN_DIR)/emu-cc
 EMUSIM = $(BIN_DIR)/emusim.x
@@ -17,18 +18,13 @@ EXE_NAME = run_emu_tc
 
 DEBUG=0
 SIMULATOR=0
-HARDWARE=1
 
 ifeq ($(SIMULATOR), 1)
   CFLAGS = -DSIMULATOR
 endif
-ifeq ($(HARDWARE), 1)
-  CFLAGS += -DHARDWARE
-endif
 ifeq ($(DEBUG), 1)
   CFLAGS += -DDEBUG
 endif
-
 
 
 .PHONY: all

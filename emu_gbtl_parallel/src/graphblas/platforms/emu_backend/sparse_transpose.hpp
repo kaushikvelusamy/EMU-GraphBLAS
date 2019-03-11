@@ -1,4 +1,4 @@
-/**
+/*
  * Implementation of the sparse matrix apply function.
  */
 
@@ -37,19 +37,19 @@ namespace GraphBLAS
                               bool            replace_flag = false)
         {
             typedef typename AMatrixT::ScalarType                   AScalarType;
-            typedef std::vector<std::tuple<IndexType,AScalarType> > ARowType;
+            typedef std::vector<std::tuple<IndexType, AScalarType> > ARowType;
 
             typedef typename CMatrixT::ScalarType                   CScalarType;
-            typedef std::vector<std::tuple<IndexType,CScalarType> > CRowType;
+            typedef std::vector<std::tuple<IndexType, CScalarType> > CRowType;
 
             IndexType nrows(A.nrows());
             IndexType ncols(A.ncols());
 
-            // =================================================================
-            // Apply the unary operator from A into T.
-            // This is really the guts of what makes this special.
-
-            /// @todo Do something different if A is TransposeView
+            /* =================================================================
+             * Apply the unary operator from A into T.
+             * This is really the guts of what makes this special.
+             * @todo Do something different if A is TransposeView
+             */
             LilSparseMatrix<AScalarType> T(ncols, nrows);
             for (IndexType ridx = A.nrows(); ridx > 0; --ridx)
             {
@@ -59,10 +59,11 @@ namespace GraphBLAS
                 {
                     T.setElement(std::get<0>(*elt), row_idx, std::get<1>(*elt));
 
-                    /// @todo Would be nice to push_back on each row directly
-                    //IndexType idx = std::get<0>(elt);
-                    //T.getRow(idx).push_back(
-                    //    std::make_tuple(row_idx, std::get<1>(elt)));
+                    /* @todo Would be nice to push_back on each row directly
+                     * IndexType idx = std::get<0>(elt);
+                     * T.getRow(idx).push_back(
+                     * std::make_tuple(row_idx, std::get<1>(elt)));
+                     */
                 }
             }
 
@@ -85,9 +86,7 @@ namespace GraphBLAS
             write_with_opt_mask(C, Z, mask, replace_flag);
             return SUCCESS;
         }
-    }
-}
+    }  // end namespace backend
+}  // end namespace GraphBLAS
 
-
-
-#endif //GB_SEQUENTIAL_SPARSE_TRANSPOSE_HPP
+#endif  // GB_SEQUENTIAL_SPARSE_TRANSPOSE_HPP

@@ -5,7 +5,7 @@
 
 #include <backend_include.hpp>
 
-//this file contains the variadic template parameters unpacking utility.
+// this file contains the variadic template parameters unpacking utility.
 
 
 namespace GraphBLAS
@@ -21,34 +21,40 @@ namespace GraphBLAS
 
 
         template<>
-        struct substitute<detail::SparsenessCategoryTag, DenseTag> {
+        struct substitute<detail::SparsenessCategoryTag,
+                          DenseTag> {
             using type = DenseTag;
         };
 
         template<>
-        struct substitute<detail::SparsenessCategoryTag, SparseTag> {
+        struct substitute<detail::SparsenessCategoryTag,
+                          SparseTag> {
             using type = SparseTag;
         };
 
         template<>
-        struct substitute<detail::DirectednessCategoryTag, UndirectedMatrixTag> {
+        struct substitute<detail::DirectednessCategoryTag,
+                          UndirectedMatrixTag> {
             using type = UndirectedMatrixTag;
         };
 
         template<>
-        struct substitute<detail::DirectednessCategoryTag, DirectedMatrixTag> {
+        struct substitute<detail::DirectednessCategoryTag,
+                          DirectedMatrixTag> {
             using type = DirectedMatrixTag;
         };
 
         template<>
-        struct substitute<detail::DirectednessCategoryTag, detail::NullTag> {
+        struct substitute<detail::DirectednessCategoryTag,
+                          detail::NullTag> {
             //default values
-            using type = DirectedMatrixTag; // default directedness
+            using type = DirectedMatrixTag;  // default directedness
         };
 
         template<>
-        struct substitute<detail::SparsenessCategoryTag, detail::NullTag> {
-            using type = SparseTag; // default sparseness
+        struct substitute<detail::SparsenessCategoryTag,
+                          detail::NullTag> {
+            using type = SparseTag;  // default sparseness
         };
 
 
@@ -56,10 +62,14 @@ namespace GraphBLAS
         // template parameter pack
 
         struct matrix_generator {
-            // recursive call: shaves off one of the tags and puts it in the right
-            // place (no error checking yet)
-            template<typename ScalarT, typename Sparseness, typename Directedness,
-                typename InputTag, typename... Tags>
+          /* recursive call: shaves off one of the tags and
+           *  puts it in the right place (no error checking yet)
+           */
+            template<typename ScalarT,
+                     typename Sparseness,
+                     typename Directedness,
+                     typename InputTag,
+                     typename... Tags>
             struct result {
                 using type = typename result<ScalarT,
                       typename detail::substitute<Sparseness, InputTag >::type,
@@ -67,25 +77,30 @@ namespace GraphBLAS
                       Tags... >::type;
             };
 
-            //null tag shortcut:
-            template<typename ScalarT, typename Sparseness, typename Directedness>
+            // null tag shortcut:
+            template<typename ScalarT,
+                     typename Sparseness,
+                     typename Directedness>
             struct result<ScalarT, Sparseness, Directedness, detail::NullTag, detail::NullTag>
             {
                 using type = typename backend::Matrix<ScalarT,
-                      typename detail::substitute<Sparseness, detail::NullTag >::type,
-                      typename detail::substitute<Directedness, detail::NullTag >::type >;
+                             typename detail::substitute<Sparseness, detail::NullTag >::type,
+                             typename detail::substitute<Directedness, detail::NullTag >::type >;
             };
 
             // base case returns the matrix from the backend
-            template<typename ScalarT, typename Sparseness, typename Directedness, typename InputTag>
+            template<typename ScalarT,
+                     typename Sparseness,
+                     typename Directedness,
+                     typename InputTag>
             struct result<ScalarT, Sparseness, Directedness, InputTag>
             {
                 using type = typename backend::Matrix<ScalarT,
                       typename detail::substitute<Sparseness, InputTag >::type,
-                      typename detail::substitute<Directedness, InputTag >::type > ;
+                      typename detail::substitute<Directedness, InputTag >::type >;
             };
         };
 
 
-    }//end detail
-}
+    }  // end namespace detail
+}  // end namespace GraphBLAS

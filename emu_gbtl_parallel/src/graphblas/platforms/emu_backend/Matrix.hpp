@@ -12,7 +12,7 @@ namespace GraphBLAS
         // @todo: Find somewhere else to put this
         class NoMask
         {
-        public:
+         public:
             NoMask() {}
 
             friend std::ostream &operator<<(std::ostream             &os,
@@ -27,7 +27,7 @@ namespace GraphBLAS
         template<typename ScalarT, typename... TagsT>
         class Matrix : public LilSparseMatrix<ScalarT>
         {
-        public:
+         public:
             typedef ScalarT ScalarType;
 
             // construct an empty matrix of fixed dimensions
@@ -58,7 +58,7 @@ namespace GraphBLAS
 
             ~Matrix() {}  // virtual?
 
-       };
-    }
-}
+        };
+    }  // end namespace backend
+}  // end namespace GraphBLAS
 

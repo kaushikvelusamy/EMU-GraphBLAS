@@ -36,9 +36,9 @@ namespace GraphBLAS
 
     struct matrix_tag {};
 
-} 
+}  // end namespace GraphBLAS
 
-#define CHECK_STATUS(x)     do { Info status(x); if (status != SUCCESS) return status; } while(0)
+#define CHECK_STATUS(x) do { Info status(x); if (status != SUCCESS) return status; } while(0)
 
 namespace std
 {
@@ -56,6 +56,6 @@ namespace std
         return os;
     }
 
-} // namespace std
+}  // end namespace std
 
-#endif // GB_TYPES_HPP
+#endif  // GB_TYPES_HPP

@@ -1,30 +1,5 @@
 /*
- * GraphBLAS Template Library, Version 2.0
- *
- * Copyright 2018 Carnegie Mellon University, Battelle Memorial Institute, and
- * Authors. All Rights Reserved.
- *
- * THIS MATERIAL WAS PREPARED AS AN ACCOUNT OF WORK SPONSORED BY AN AGENCY OF
- * THE UNITED STATES GOVERNMENT.  NEITHER THE UNITED STATES GOVERNMENT NOR THE
- * UNITED STATES DEPARTMENT OF ENERGY, NOR THE UNITED STATES DEPARTMENT OF
- * DEFENSE, NOR CARNEGIE MELLON UNIVERSITY, NOR BATTELLE, NOR ANY OF THEIR
- * EMPLOYEES, NOR ANY JURISDICTION OR ORGANIZATION THAT HAS COOPERATED IN THE
- * DEVELOPMENT OF THESE MATERIALS, MAKES ANY WARRANTY, EXPRESS OR IMPLIED, OR
- * ASSUMES ANY LEGAL LIABILITY OR RESPONSIBILITY FOR THE ACCURACY, COMPLETENESS,
- * OR USEFULNESS OR ANY INFORMATION, APPARATUS, PRODUCT, SOFTWARE, OR PROCESS
- * DISCLOSED, OR REPRESENTS THAT ITS USE WOULD NOT INFRINGE PRIVATELY OWNED
- * RIGHTS..
- *
- * Released under a BSD (SEI)-style license, please see license.txt or contact
- * permission@sei.cmu.edu for full terms.
- *
- * This release is an update of:
- *
- * 1. GraphBLAS Template Library (GBTL)
- * (https://github.com/cmu-sei/gbtl/blob/1.0.0/LICENSE) Copyright 2015 Carnegie
- * Mellon University and The Trustees of Indiana. DM17-0037, DM-0002659
- *
- * DM18-0559
+
  */
 
 #ifndef GB_SEQUENTIAL_TRANSPOSE_VIEW_HPP
@@ -46,7 +21,7 @@ namespace GraphBLAS
         template<typename MatrixT>
         class TransposeView
         {
-        public:
+         public:
             typedef typename MatrixT::ScalarType ScalarType;
 
             // CONSTRUCTORS
@@ -71,15 +46,14 @@ namespace GraphBLAS
             ~TransposeView()
             {
             }
-
-            // EQUALITY OPERATORS
-            //bool
-            //operator==(TransposeView<MatrixT> const &rhs) const
-            //{
-            //    return m_matrix == rhs.m_matrix;
-            //}
-
-            /**
+            /*
+             * EQUALITY OPERATORS
+             * bool
+             * operator==(TransposeView<MatrixT> const &rhs) const
+             * {
+             *    return m_matrix == rhs.m_matrix;
+             * }
+             * ***********************************************************
              * @brief Equality testing for matrix. (value equality?)
              *
              * @param[in] rhs  The right hand side of the equality
@@ -110,7 +84,8 @@ namespace GraphBLAS
                         {
                             if (has)
                             {
-                                if (extractElement(i, j) != rhs.extractElement(i, j))
+                                if (extractElement(i, j) !=
+                                    rhs.extractElement(i, j))
                                 {
                                     return false;
                                 }
@@ -174,23 +149,24 @@ namespace GraphBLAS
             }
 
 
-            // Not certain about this implementation.  Commented out because
-            // currently TransposeViews are read-only.
-            //void setElement(IndexType         row,
-            //                IndexType         col,
-            //                ScalarType const &val)
-            //{
-            //    m_matrix.setElement(col, row, val);
-            //}
-
-            // commented out because currently TransposeViews are read-only
-            // template <typename BinaryOpT>
-            // void setElement(IndexType irow, IndexType icol, ScalarType const &val,
-            //                 BinaryOpT merge)
-            // {
-            //     m_matrix.setElement(icol, irow, val, merge);
-            // }
-
+          /*            Not certain about this implementation.  Commented out because
+           * currently TransposeViews are read-only.
+           * void setElement(IndexType         row,
+           *                IndexType         col,
+           *                ScalarType const &val)
+           * {
+           *    m_matrix.setElement(col, row, val);
+           * }
+           *
+           * commented out because currently TransposeViews are read-only
+           * template <typename BinaryOpT>
+           * void setElement(IndexType irow, IndexType icol, ScalarType const &val,
+           *                 BinaryOpT merge)
+           * {
+           *      m_matrix.setElement(icol, irow, val, merge);
+           *  }
+           */
+          
             typedef typename MatrixT::ColType RowType;
             RowType getRow(IndexType row_index) const
             {
@@ -207,10 +183,10 @@ namespace GraphBLAS
                 return m_matrix.getRow(col_index);
             }
 
-            // Not implemented
-            //void setCol(IndexType col_index,
-            //            std::vector<std::tuple<IndexType, ScalarType> > &col_data)
-
+          /* Not implemented
+           * void setCol(IndexType col_index,
+           *            std::vector<std::tuple<IndexType, ScalarType> > &col_data)
+           */
 
             // Get column indices for a given row
             void getColumnIndices(IndexType irow, IndexArrayType &v) const
@@ -224,8 +200,7 @@ namespace GraphBLAS
                 m_matrix.getColIndices(icol, v);
             }
 
-            //other methods that may or may not belong here:
-            //
+            // other methods that may or may not belong here:
             void printInfo(std::ostream &os) const
             {
                 os << "Backend TransposeView of:" << std::endl;
@@ -233,14 +208,14 @@ namespace GraphBLAS
             }
 
             friend std::ostream&
-            operator<<(std::ostream                 &os,
-                       TransposeView<MatrixT> const &mat)
+            operator<< (std::ostream                 &os,
+                       TransposeView<MatrixT>        const &mat)
             {
                 mat.printInfo(os);
                 return os;
             }
 
-        private:
+         private:
             /**
              * Copy assignment not implemented.
              *
@@ -251,12 +226,10 @@ namespace GraphBLAS
              */
             TransposeView<MatrixT>&
             operator=(TransposeView<MatrixT> const &rhs);
-
-        private:
             MatrixT const &m_matrix;
         };
 
-    } //backend
-} // GraphBLAS
+    }  // end namespace backend
+}  // end namespace GraphBLAS
 
-#endif // GB_SEQUENTIAL_TRANSPOSE_VIEW_HPP
+#endif  // GB_SEQUENTIAL_TRANSPOSE_VIEW_HPP

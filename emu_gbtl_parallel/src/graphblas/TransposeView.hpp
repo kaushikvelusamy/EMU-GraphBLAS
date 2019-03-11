@@ -1,30 +1,4 @@
 /*
- * GraphBLAS Template Library, Version 2.0
- *
- * Copyright 2018 Carnegie Mellon University, Battelle Memorial Institute, and
- * Authors. All Rights Reserved.
- *
- * THIS MATERIAL WAS PREPARED AS AN ACCOUNT OF WORK SPONSORED BY AN AGENCY OF
- * THE UNITED STATES GOVERNMENT.  NEITHER THE UNITED STATES GOVERNMENT NOR THE
- * UNITED STATES DEPARTMENT OF ENERGY, NOR THE UNITED STATES DEPARTMENT OF
- * DEFENSE, NOR CARNEGIE MELLON UNIVERSITY, NOR BATTELLE, NOR ANY OF THEIR
- * EMPLOYEES, NOR ANY JURISDICTION OR ORGANIZATION THAT HAS COOPERATED IN THE
- * DEVELOPMENT OF THESE MATERIALS, MAKES ANY WARRANTY, EXPRESS OR IMPLIED, OR
- * ASSUMES ANY LEGAL LIABILITY OR RESPONSIBILITY FOR THE ACCURACY, COMPLETENESS,
- * OR USEFULNESS OR ANY INFORMATION, APPARATUS, PRODUCT, SOFTWARE, OR PROCESS
- * DISCLOSED, OR REPRESENTS THAT ITS USE WOULD NOT INFRINGE PRIVATELY OWNED
- * RIGHTS..
- *
- * Released under a BSD (SEI)-style license, please see license.txt or contact
- * permission@sei.cmu.edu for full terms.
- *
- * This release is an update of:
- *
- * 1. GraphBLAS Template Library (GBTL)
- * (https://github.com/cmu-sei/gbtl/blob/1.0.0/LICENSE) Copyright 2015 Carnegie
- * Mellon University and The Trustees of Indiana. DM17-0037, DM-0002659
- *
- * DM18-0559
  */
 
 #pragma once
@@ -35,9 +9,6 @@
 #define GB_INCLUDE_BACKEND_TRANSPOSE_VIEW 1
 #include <backend_include.hpp>
 
-//****************************************************************************
-//****************************************************************************
-
 
 namespace GraphBLAS
 {
@@ -45,16 +16,17 @@ namespace GraphBLAS
     template<typename MatrixT>
     class TransposeView
     {
-    public:
+     public:
         typedef matrix_tag  tag_type;
 
         typedef typename backend::TransposeView<
             typename MatrixT::BackendType> BackendType;
         typedef typename MatrixT::ScalarType ScalarType;
 
-        //note:
-        //the backend should be able to decide when to ignore any of the
-        //tags and/or arguments
+      /*        note:
+       * the backend should be able to decide when to ignore any of the
+       * tags and/or arguments
+       */
         TransposeView(BackendType backend_view)
             : m_mat(backend_view)
         {
@@ -72,7 +44,7 @@ namespace GraphBLAS
 
         ~TransposeView() { }
 
-        /// @todo need to change to mix and match internal types
+        // @todo need to change to mix and match internal types
         template <typename OtherMatrixT>
         bool operator==(OtherMatrixT const &rhs) const
         {
@@ -122,7 +94,7 @@ namespace GraphBLAS
             m_mat.extractTuples(row_indices, col_indices, values);
         }
 
-        //other methods that may or may not belong here:
+        // other methods that may or may not belong here:
         //
         void printInfo(std::ostream &os) const
         {
@@ -137,7 +109,7 @@ namespace GraphBLAS
             return os;
         }
 
-    private:
+     private:
         BackendType m_mat;
 
         // PUT ALL FRIEND DECLARATIONS HERE
@@ -160,7 +132,7 @@ namespace GraphBLAS
         template<typename CScalarT,
                  typename MaskT,
                  typename AccumT,
-                 typename BinaryOpT,  //can be BinaryOp, Monoid (not Semiring)
+                 typename BinaryOpT,  // can be BinaryOp, Monoid (not Semiring)
                  typename AMatrixT,
                  typename BMatrixT,
                  typename... CTagsT>
@@ -176,7 +148,7 @@ namespace GraphBLAS
         template<typename CScalarT,
                  typename MaskT,
                  typename AccumT,
-                 typename BinaryOpT,  //can be BinaryOp, Monoid (not Semiring)
+                 typename BinaryOpT,  // can be BinaryOp, Monoid (not Semiring)
                  typename AMatrixT,
                  typename BMatrixT,
                  typename... CTagsT>
@@ -315,4 +287,4 @@ namespace GraphBLAS
                                      bool            replace_flag);
     };
 
-} // end namespace GraphBLAS
+}  // end namespace GraphBLAS

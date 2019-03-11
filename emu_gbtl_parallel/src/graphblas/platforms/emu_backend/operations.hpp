@@ -23,7 +23,7 @@ namespace GraphBLAS
             return TransposeView<MatrixT>(A);
         }
 
-    } // backend
-} // GraphBLAS
+    }  // end namespace backend
+}  // end namespace GraphBLAS
 
-#endif // GB_SEQUENTIAL_OPERATIONS_HPP
+#endif  // GB_SEQUENTIAL_OPERATIONS_HPP

@@ -1,13 +1,13 @@
 
 #ifndef GB_ALGEBRA_HPP
 #define GB_ALGEBRA_HPP
-
-//#include <math.h>
-//#include <algorithm>
-//#include <functional>
 #include <limits>
-//#include <utility>
 
+/* #include <math.h>
+ * #include <algorithm>
+ * #include <functional>
+ * #include <utility>
+ */
 namespace GraphBLAS
 {
     //****************************************************************************
@@ -250,7 +250,7 @@ namespace GraphBLAS
         inline D3 operator()(D1 lhs, D2 rhs) { return (lhs ^ rhs); }
     };
 
-} // namespace GraphBLAS
+}  // end namespace GraphBLAS
 
 
 typedef GraphBLAS::LogicalOr<bool>    GrB_LOR;
@@ -265,7 +265,7 @@ typedef GraphBLAS::LogicalXor<bool>   GrB_LXOR;
     template <typename ScalarT>                                 \
     struct M_NAME                                               \
     {                                                           \
-    public:                                                     \
+     public:                                                    \
         typedef ScalarT lhs_type;                               \
         typedef ScalarT rhs_type;                               \
         typedef ScalarT ScalarType;                             \
@@ -293,7 +293,7 @@ namespace GraphBLAS
     GEN_GRAPHBLAS_MONOID(MaxMonoid, Max, 0)
 
     GEN_GRAPHBLAS_MONOID(LogicalOrMonoid, LogicalOr, false)
-} // GraphBLAS
+}  // end namespace GraphBLAS
 
 //****************************************************************************
 // Semirings
@@ -307,10 +307,10 @@ namespace GraphBLAS
  * @param[in]  MULT_BINARYOP The multiplication binary function
  */
 #define GEN_GRAPHBLAS_SEMIRING(SRNAME, ADD_MONOID, MULT_BINARYOP)       \
-    template <typename D1, typename D2=D1, typename D3=D1>              \
+    template <typename D1, typename D2 = D1, typename D3 = D1>          \
     class SRNAME                                                        \
     {                                                                   \
-    public:                                                             \
+     public:                                                            \
         typedef D1 lhs_type;                                            \
         typedef D2 rhs_type;                                            \
         typedef D3 ScalarType;                                          \
@@ -320,7 +320,7 @@ namespace GraphBLAS
         { return ADD_MONOID<D3>()(a, b); }                              \
                                                                         \
         D3 mult(D1 a, D2 b) const                                       \
-        { return MULT_BINARYOP<D1,D2,D3>()(a, b); }                     \
+        { return MULT_BINARYOP<D1, D2, D3>()(a, b); }                   \
                                                                         \
         ScalarType zero() const                                         \
         { return ADD_MONOID<D3>().identity(); }                         \
@@ -345,7 +345,7 @@ namespace GraphBLAS
 
     GEN_GRAPHBLAS_SEMIRING(MinSelect1stSemiring, MinMonoid, First)
     GEN_GRAPHBLAS_SEMIRING(MaxSelect1stSemiring, MaxMonoid, First)
-} // namespace GraphBLAS
+}  // end namespace GraphBLAS
 
 
-#endif // GB_ALGEBRA_HPP
+#endif  // GB_ALGEBRA_HPP

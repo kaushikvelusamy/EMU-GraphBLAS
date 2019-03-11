@@ -2,8 +2,10 @@
 
 namespace GraphBLAS
 {
-    // The default matrix is sparse and directed, and the default vector is sparse,
-    // so we need tags that modify that
+    /* The default matrix is sparse and directed,
+     * and the default vector is sparse,
+     * so we need tags that modify that
+     */
     struct DirectedMatrixTag {};
     struct UndirectedMatrixTag {};
     struct DenseTag {};
@@ -15,7 +17,7 @@ namespace GraphBLAS
         struct SparsenessCategoryTag {};
         struct DirectednessCategoryTag {};
         struct NullTag {};
-    } //end detail
+    }  // end namespace detail
 
-}//end GraphBLAS
+}  // end namespace GraphBLAS
 

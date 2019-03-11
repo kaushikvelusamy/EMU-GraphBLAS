@@ -30,7 +30,7 @@ namespace GraphBLAS
             // Do the basic reduction work with the monoid
             typedef typename MonoidT::result_type D3ScalarType;
             typedef typename AMatrixT::ScalarType AScalarType;
-            typedef std::vector<std::tuple<IndexType,AScalarType> >  ARowType;
+            typedef std::vector<std::tuple<IndexType, AScalarType> >  ARowType;
 
             D3ScalarType t = op.identity();
 
@@ -38,26 +38,30 @@ namespace GraphBLAS
             {
                 for (IndexType row_idx = 0; row_idx < A.nrows(); ++row_idx)
                 {
-                    /// @todo Can't be a reference because A might be transpose
-                    /// view.  Need to specialize on TransposeView and getCol()
+                  /* @todo Can't be a reference because A might be transpose
+                   * view.  Need to specialize on TransposeView and getCol()
+                   * ARowType const A_row(A.getRow(row_idx));
+
+                   * @todo There is something hinky with domains here.  How
+                   * does one perform the reduction in A domain but produce
+                   * partial results in D3(op)?
+                   */
                     ARowType const A_row(A.getRow(row_idx));
 
-                    /// @todo There is something hinky with domains here.  How
-                    /// does one perform the reduction in A domain but produce
-                    /// partial results in D3(op)?
                     D3ScalarType tmp;
                     if (reduction(tmp, A_row, op))
                     {
-                        t = op(t, tmp); // reduce each row
+                        t = op(t, tmp);  // reduce each row
                     }
                 }
             }
 
-            // =================================================================
-            // Accumulate into Z
-            /// @todo Do we need a type generator for z: D(w) if no accum,
-            /// or D3(accum). I think that D(z) := D(val) should be equivalent, but
-            /// still need to work the proof.
+            /* =================================================================
+             * Accumulate into Z
+             * @todo Do we need a type generator for z: D(w) if no accum,
+             * or D3(accum). I think that D(z) := D(val) should be equivalent, but
+             * still need to work the proof.
+             */
             ValueT z;
             opt_accum_scalar(z, val, t, accum);
 
@@ -66,7 +70,7 @@ namespace GraphBLAS
             return SUCCESS;
         }
 
-    } // backend
-} // GraphBLAS
+    }  // end namespace backend
+}  // end namespace GraphBLAS
 
 #endif
